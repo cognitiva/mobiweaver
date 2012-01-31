@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-16"?>
+<nugget name="MOBIWEAVER.NUGG">
+ <CLAS CLSNAME="Y_MW_SEARCH_HELP_FIELDS" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwsearchhelp" UUID="E1477CBF20D5ECF1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDON="20120125" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
+  <publicSection>class Y_MW_SEARCH_HELP_FIELDS definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125">
+   <redefinition CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+* Mobiweaver search help service
+*
+* this handler will return a XML file with the list of fields available
+* to be used in the search help dialog box.
+
+  data:
+    l_shlp_name type shlpname,
+    ls_shlp     type shlp_descr,
+    lo_view     type ref to if_bsp_page.
+
+  l_shlp_name = request-&gt;get_form_field( name = &apos;sh&apos; ).
+
+  translate l_shlp_name to upper case.
+
+  call function &apos;F4IF_GET_SHLP_DESCR&apos;
+    exporting
+      shlpname = l_shlp_name
+    importing
+      shlp     = ls_shlp.
+
+  response-&gt;set_header_field( name  = &apos;Content-Type&apos; value = &apos;text/xml&apos; ). &quot;#EC NOTEXT
+
+  lo_view = create_view( view_name = &apos;fields.xml&apos; ).
+  lo_view-&gt;set_attribute( name  = &apos;field_desc&apos; value = ls_shlp-fielddescr ).
+  call_view( lo_view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_SEARCH_HELP_RES" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwsearchhelp" UUID="E1477E1DEDF632F1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDON="20120125" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
+  <publicSection>class Y_MW_SEARCH_HELP_RES definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_SEARCH_HELP_RES
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_MW_SEARCH_HELP_RES
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_MW_SEARCH_HELP_RES
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_SEARCH_HELP_RES" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125">
+   <redefinition CLSNAME="Y_MW_SEARCH_HELP_RES" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+* Mobiweaver search help service
+*
+* this handler will return a XML file with the result of the search using
+* the search help.
+* It supports searches with a single query value for each search help field
+* and supports the wildcard in the query value.
+
+  data:
+    l_shlp_name  type shlpname,
+    l_value      type string,
+    l_name       type string,
+    ls_selopt    type ddshselopt,
+    ls_shlp      type shlp_descr,
+    lt_xml       type tchar255,
+    lt_selopt    type ddshselops,
+    lo_view      type ref to if_bsp_page.
+
+  field-symbols:
+    &lt;ls_field_desc&gt; type dfies.
+
+  l_shlp_name = request-&gt;get_form_field( name = &apos;sh&apos; ).
+  translate l_shlp_name to upper case.
+
+
+  call function &apos;F4IF_GET_SHLP_DESCR&apos;
+    exporting
+      shlpname = l_shlp_name
+    importing
+      shlp     = ls_shlp.
+
+
+  loop at ls_shlp-fielddescr assigning &lt;ls_field_desc&gt;.
+
+    l_name = &lt;ls_field_desc&gt;-fieldname.
+    l_value = request-&gt;get_form_field( name = l_name ).
+
+    if &lt;ls_field_desc&gt;-lowercase &lt;&gt; &apos;X&apos;.
+      translate l_value to upper case.
+    endif.
+
+    if l_value is not initial.
+      clear ls_selopt.
+      ls_selopt-shlpname = l_shlp_name.
+      ls_selopt-shlpfield = &lt;ls_field_desc&gt;-fieldname.
+      ls_selopt-sign = &apos;I&apos;.
+      if l_value cs &apos;*&apos;.
+        ls_selopt-option = &apos;CP&apos;.
+      else.
+        ls_selopt-option = &apos;EQ&apos;.
+      endif.
+      ls_selopt-low = l_value.
+
+      append ls_selopt to lt_selopt.
+    endif.
+
+  endloop.
+
+  call function &apos;Y_MW_SHLP_SELECT_VALUES&apos;
+    exporting
+      is_shlp        = ls_shlp
+      it_selopt      = lt_selopt
+    importing
+      et_output_xml  = lt_xml
+    exceptions
+      others         = 1.
+
+  if sy-subrc &lt;&gt; 0.
+    clear lt_xml.
+  endif.
+
+
+  response-&gt;set_header_field( name  = &apos;Content-Type&apos; value = &apos;text/xml&apos; ). &quot;#EC NOTEXT
+
+  lo_view = create_view( view_name = &apos;list.xml&apos; ).
+  lo_view-&gt;set_attribute( name  = &apos;results_xml&apos; value = lt_xml ).
+  call_view( lo_view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <FUGR SPRAS="E" AREA="Y_MOBIWEAVER" AREAT="Mobiweaver">
+  <mainprogram NAME="SAPLY_MOBIWEAVER" VARCL="X" DBAPL="S" DBNA="D$" SUBC="F" APPL="S" CNAM="PLIMA" CDAT="20120126" UNAM="PLIMA" UDAT="20120126" VERN="000003" RMAND="800" RLOAD="E" FIXPT="X" SDATE="20120127" STIME="125643" IDATE="20120126" ITIME="115055" LDBNAME="D$S" UCCHECK="X">
+   <textPool/>
+   <source>*******************************************************************
+*   System-defined Include-files.                                 *
+*******************************************************************
+  INCLUDE LY_MOBIWEAVERTOP.                  &quot; Global Data
+  INCLUDE LY_MOBIWEAVERUXX.                  &quot; Function Modules
+
+*******************************************************************
+*   User-defined Include-files (if necessary).                    *
+*******************************************************************
+* INCLUDE LY_MOBIWEAVERF...                  &quot; Subprograms
+* INCLUDE LY_MOBIWEAVERO...                  &quot; PBO-Modules
+* INCLUDE LY_MOBIWEAVERI...                  &quot; PAI-Modules
+
+INCLUDE LY_MOBIWEAVERF01.</source>
+  </mainprogram>
+  <includeprograms>
+   <include NAME="LY_MOBIWEAVERF01" VARCL="X" SUBC="I" APPL="S" CNAM="PLIMA" CDAT="20120126" UNAM="PLIMA" UDAT="20120127" VERN="000007" RMAND="800" RLOAD="E" SDATE="20120127" STIME="125457" IDATE="20120127" ITIME="125457" UCCHECK="X">
+    <include_source>*----------------------------------------------------------------------*
+***INCLUDE LY_MOBIWEAVERF01 .
+*----------------------------------------------------------------------*
+
+
+*&amp;---------------------------------------------------------------------*
+*&amp;      Form  MAP_RECORD_TO_XML
+*&amp;---------------------------------------------------------------------*
+* Maps the search help records to the XML format for the mobiweaver
+* search help api
+*----------------------------------------------------------------------*
+form map_record_to_xml tables it_record structure seahlpres
+                              it_dfies structure dfies
+                       changing et_xml type tchar255.
+
+  data:
+    l_offset type i,
+    l_title type string,
+    ls_xml type char255.
+
+  field-symbols:
+    &lt;ls_dfies&gt; type dfies,
+    &lt;ls_record&gt; type seahlpres.
+
+  loop at it_dfies assigning &lt;ls_dfies&gt;.
+    perform unicode_byte2char(saplsdsd) changing &lt;ls_dfies&gt;-offset.
+  endloop.
+
+  loop at it_record assigning &lt;ls_record&gt;.
+    clear l_offset.
+    ls_xml = &apos;&lt;entry&gt;&apos;.
+    append ls_xml to et_xml.
+    loop at it_dfies assigning &lt;ls_dfies&gt;.
+
+      if &lt;ls_dfies&gt;-scrtext_s is not initial.
+        l_title = &lt;ls_dfies&gt;-scrtext_s.
+      elseif &lt;ls_dfies&gt;-scrtext_m is not initial.
+        l_title = &lt;ls_dfies&gt;-scrtext_m.
+      else.
+        l_title = &lt;ls_dfies&gt;-reptext.
+      endif.
+
+      concatenate &apos;&lt;field name=&quot;&apos;
+                  &lt;ls_dfies&gt;-fieldname
+                  &apos;&quot; title=&quot;&apos;
+                  l_title
+                  &apos;&quot;&gt;&apos;
+                  &lt;ls_record&gt;+&lt;ls_dfies&gt;-offset(&lt;ls_dfies&gt;-leng)
+                  &apos;&lt;/field&gt;&apos;
+             into ls_xml.
+      append ls_xml to et_xml.
+
+      l_offset = l_offset + &lt;ls_dfies&gt;-leng + 1.
+
+    endloop.
+    ls_xml = &apos;&lt;/entry&gt;&apos;.
+    append ls_xml to et_xml.
+  endloop.
+
+endform.                    &quot; MAP_RECORD_TO_XML</include_source>
+   </include>
+   <include NAME="LY_MOBIWEAVERTOP" VARCL="X" DBAPL="S" DBNA="D$" SUBC="I" APPL="S" CNAM="PLIMA" CDAT="20120126" UNAM="PLIMA" UDAT="20120126" VERN="000002" RMAND="800" FIXPT="X" SDATE="20120126" STIME="110329" IDATE="20120126" ITIME="110329" LDBNAME="D$S" UCCHECK="X">
+    <include_source>FUNCTION-POOL Y_MOBIWEAVER.                 &quot;MESSAGE-ID ..</include_source>
+   </include>
+  </includeprograms>
+  <functionmodules>
+   <functionmodule NAME="Y_MW_SHLP_SELECT_VALUES" STEXT="Search help value selection">
+    <importing PARAMETER="IS_SHLP" REFERENCE="X" TYP="SHLP_DESCR"/>
+    <importing PARAMETER="IT_SELOPT" OPTIONAL="X" REFERENCE="X" TYP="DDSHSELOPS"/>
+    <exporting PARAMETER="ET_OUTPUT_XML" REFERENCE="X" TYP="TCHAR255"/>
+    <documentation PARAMETER="IS_SHLP" KIND="P" STEXT="Description of Search Help" INDEX=" 001"/>
+    <documentation PARAMETER="IT_SELOPT" KIND="P" STEXT="Selection options for value selection with search help" INDEX=" 002"/>
+    <documentation PARAMETER="ET_OUTPUT_XML" KIND="P" STEXT="Table of CHAR255" INDEX=" 003"/>
+    <fm_source>* This function will perform a data search using the given search help
+* and select-options and will format the result using the XML defined
+* for the Mobiweaver search help API.
+
+  data:
+    ls_shlp type shlp_descr,
+    lt_record type table of seahlpres,
+    lt_recdescr type table of dfies.
+
+  ls_shlp = is_shlp.
+
+  if it_selopt is not initial.
+    ls_shlp-selopt = it_selopt.
+  endif.
+
+  call function &apos;F4IF_SELECT_VALUES&apos;
+    exporting
+      shlp           = ls_shlp
+      sort           = &apos;X&apos;
+      call_shlp_exit = &apos;X&apos;
+    tables
+      record_tab     = lt_record
+      recdescr_tab   = lt_recdescr.
+
+  perform map_record_to_xml tables lt_record lt_recdescr
+                            changing et_output_xml.</fm_source>
+   </functionmodule>
+  </functionmodules>
+ </FUGR>
+ <SICF ICF_NAME="YMWSEARCHHELP" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICFNODGUID="DC4ULYTAKSLP9IQ7BS66SPBLE" ICFCHILDNO="0 " ICFALIASNO="0 " ICF_OPTION="0 " ICF_TIME="000000" ICF_CUSER="PLIMA" ICF_CDATE="20120125" ICF_MUSER="PLIMA" ICF_MDATE="20120125" ICF_AUTHRC="0" ORIG_NAME="ymwsearchhelp">
+  <icfdocu ICF_NAME="YMWSEARCHHELP" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICF_LANGU="E" ICF_DOCU="Mobiweaver search help service"/>
+ </SICF>
+ <WAPA APPLNAME="YMWSEARCHHELP" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" APPLEXT="ymwsearchhelp" DEVCLASS="$TMP" ORIGLANG="E" MODIFLANG="E" TEXT="Mobiweaver search help service">
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.DO" PAGENAME="fields.do" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" IMPLCLASS="Y_MW_SEARCH_HELP_FIELDS" GENDATE="20120125" GENTIME="175318" PAGETYPE="C" CHANGETIME="174811" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Mobiweaver search help fields controller"/>
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.XML" PAGENAME="fields.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" IMPLCLASS="CL_O2DC4UNXC3DDW00OHEFM5C2O0KY" GENDATE="20120125" GENTIME="184653" PAGETYPE="V" CHANGETIME="184651" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Search help fields">
+   <layout>&lt;%@page language=&quot;abap&quot; %&gt;&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;%
+  field-symbols: &lt;field&gt; type dfies.
+%&gt;
+&lt;searchhelp&gt;
+&lt;%
+  loop at field_desc assigning &lt;field&gt;.
+%&gt;
+&lt;field name=&quot;&lt;%= &lt;field&gt;-fieldname %&gt;&quot; datatype=&quot;text&quot;&gt;
+&lt;% if &lt;field&gt;-scrtext_s is not initial. %&gt;
+&lt;%= &lt;field&gt;-scrtext_s %&gt;
+&lt;% elseif &lt;field&gt;-scrtext_m is not initial. %&gt;
+&lt;%= &lt;field&gt;-scrtext_m %&gt;
+&lt;% elseif &lt;field&gt;-reptext is not initial. %&gt;
+&lt;%= &lt;field&gt;-reptext %&gt;
+&lt;% endif. %&gt;
+&lt;/field&gt;
+&lt;%
+  endloop.
+%&gt;
+&lt;/searchhelp&gt;</layout>
+   <parameter APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.XML" COMPNAME="FIELD_DESC" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="RSDS_T_DFIES" ALIASNAME="field_desc" TEXT="DFIES Table"/>
+  </page>
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" PAGENAME="list.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120126" IMPLCLASS="CL_O2DC4UPMWM6T4H70B1J6OHLF3ZM" GENDATE="20120126" GENTIME="145742" PAGETYPE="V" CHANGETIME="145738" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="List results for the search help">
+   <layout>&lt;%@page language=&quot;abap&quot;%&gt;&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;% field-symbols: &lt;line&gt; type char255. %&gt;
+&lt;searchhelp&gt;
+
+&lt;% loop at results_xml assigning &lt;line&gt;. %&gt;
+  &lt;%= &lt;line&gt; %&gt;
+&lt;% endloop. %&gt;
+
+&lt;/searchhelp&gt;</layout>
+   <parameter APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" COMPNAME="RESULTS_XML" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TCHAR255" ALIASNAME="results_xml" TEXT="Table of CHAR255"/>
+  </page>
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="SEARCH.DO" PAGENAME="search.do" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" IMPLCLASS="Y_MW_SEARCH_HELP_RES" GENDATE="20120125" GENTIME="175827" PAGETYPE="C" CHANGETIME="175748" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Search help results"/>
+ </WAPA>
+</nugget>

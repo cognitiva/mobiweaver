@@ -1,0 +1,24 @@
+======
+README
+======
+
+This folder contains patched versions of jQuery Mobile that work well with Netweaver BSP.
+
+
+Technical details
+-----------------
+Netweaver request processing does a rewrite of urls to include additional data. So urls like
+
+http://myserver.com/sap/bc/bsp/example/page.htm
+
+will be mangled into something like
+
+http://myserver.com/sap(bD1lbiZjPTgwMA==)/bc/bsp/example/page.htm
+
+This should not be a problem, but the way jQuery Mobile is currently designed does not work well when there are parentheses in the url. A patch is available to work around the issue while a better solution is not added to jQM. 
+
+https://github.com/jquery/jquery-mobile/issues/1383
+https://github.com/michaelhull/jquery-mobile/commit/0ecd1c71422f014a1ef1335763336251ebf6684f
+
+The files in the folder are versions of jQM that already include the patch for extra commodity. 
+

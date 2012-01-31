@@ -1,0 +1,1181 @@
+<?xml version="1.0" encoding="utf-16"?>
+<nugget name="MOBIWEAVER_SAMPLES_ECC">
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_ACTION" VERSION="1" LANGU="E" DESCRIPT="Controller Class for YTRST" UUID="96DD7929BAA7E546956830FADD633DE1" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_SHIP_ACTION definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_ACTION
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_ACTION
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_ACTION
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_SHIP_ACTION" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_SHIP_ACTION" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data:
+    l_mode  type string,
+    l_error type flag,
+    l_json  type string,
+    l_tknum type tknum,
+    l_tknum_str type string,
+    ls_header type bapishipmentheader,
+    ls_action type bapishipmentheaderaction,
+    ls_vttk type vttk,
+    lt_return type table of bapiret2.
+
+  field-symbols:
+    &lt;ls_return&gt; type bapiret2.
+
+  l_mode = request-&gt;get_form_field( name = &apos;mode&apos; ).
+
+  l_tknum_str = request-&gt;get_form_field( name = &apos;sid&apos; ).
+
+  if l_mode is initial or l_tknum_str is initial.
+    write(&apos;{ }&apos;).
+    return.
+  endif.
+
+  call function &apos;CONVERSION_EXIT_ALPHA_INPUT&apos;
+    exporting
+      input  = l_tknum_str
+    importing
+      output = l_tknum.
+
+  select single * from vttk into ls_vttk
+   where tknum = l_tknum.
+
+  if sy-subrc &lt;&gt; 0.
+    write(&apos;{ }&apos;).
+    return.
+  endif.
+
+  ls_header-shipment_num = l_tknum.
+  ls_action-shipment_num = l_tknum.
+
+  if l_mode = &apos;streg&apos;.
+    if ls_vttk-streg = abap_true.
+      ls_header-status_checkin = &apos;&apos;.
+      ls_action-status_checkin = &apos;D&apos;.
+    else.
+      ls_header-status_checkin = &apos;X&apos;.
+      ls_action-status_checkin = &apos;C&apos;.
+    endif.
+  endif.
+
+
+  if l_mode = &apos;stlbg&apos;.
+    if ls_vttk-stlbg = abap_true.
+      ls_header-status_load_start = &apos;&apos;.
+      ls_action-status_load_start = &apos;D&apos;.
+    else.
+      ls_header-status_load_start = &apos;X&apos;.
+      ls_action-status_load_start = &apos;C&apos;.
+    endif.
+  endif.
+
+  if l_mode = &apos;stlad&apos;.
+    if ls_vttk-stlad = abap_true.
+      ls_header-status_load_end = &apos;&apos;.
+      ls_action-status_load_end = &apos;D&apos;.
+    else.
+      ls_header-status_load_end = &apos;X&apos;.
+      ls_action-status_load_end = &apos;C&apos;.
+    endif.
+  endif.
+
+  if l_mode = &apos;stabf&apos;.
+    if ls_vttk-stabf = abap_true.
+      ls_header-status_compl = &apos;&apos;.
+      ls_action-status_compl = &apos;D&apos;.
+    else.
+      ls_header-status_compl = &apos;X&apos;.
+      ls_action-status_compl = &apos;C&apos;.
+    endif.
+  endif.
+
+  if l_mode = &apos;sttbg&apos;.
+    if ls_vttk-sttbg = abap_true.
+      ls_header-status_shpmnt_start = &apos;&apos;.
+      ls_action-status_shpmnt_start = &apos;D&apos;.
+    else.
+      ls_header-status_shpmnt_start = &apos;X&apos;.
+      ls_action-status_shpmnt_start = &apos;C&apos;.
+    endif.
+  endif.
+
+  if l_mode = &apos;stten&apos;.
+    if ls_vttk-stten = abap_true.
+      ls_header-status_shpmnt_end = &apos;&apos;.
+      ls_action-status_shpmnt_end = &apos;D&apos;.
+    else.
+      ls_header-status_shpmnt_end = &apos;X&apos;.
+      ls_action-status_shpmnt_end = &apos;C&apos;.
+    endif.
+  endif.
+
+* update the shipment document with the status change
+  call function &apos;BAPI_SHIPMENT_CHANGE&apos;
+    exporting
+      headerdata       = ls_header
+      headerdataaction = ls_action
+    tables
+      return           = lt_return.
+
+  loop at lt_return assigning &lt;ls_return&gt;.
+    if &lt;ls_return&gt;-type = &apos;E&apos; or &lt;ls_return&gt;-type = &apos;A&apos;.
+      l_error = abap_true.
+    endif.
+  endloop.
+
+  if l_error is initial.
+
+    call function &apos;BAPI_TRANSACTION_COMMIT&apos;
+      exporting
+        wait = &apos;X&apos;.
+
+    select single * from vttk into ls_vttk
+     where tknum = l_tknum.
+
+    if sy-subrc = 0.
+
+      concatenate
+        &apos;{&quot;streg&quot;:&quot;&apos;  ls_vttk-streg &apos;&quot;, &quot;dareg&quot;:&quot;&apos; ls_vttk-dareg &apos;&quot;,&quot;uareg&quot;:&quot;&apos; ls_vttk-uareg &apos;&quot;,&apos;
+        &apos;&quot;stlbg&quot;:&quot;&apos;  ls_vttk-stlbg &apos;&quot;, &quot;dalbg&quot;:&quot;&apos; ls_vttk-dalbg &apos;&quot;,&quot;ualbg&quot;:&quot;&apos; ls_vttk-ualbg &apos;&quot;,&apos;
+        &apos;&quot;stlad&quot;:&quot;&apos;  ls_vttk-stlad &apos;&quot;, &quot;dalen&quot;:&quot;&apos; ls_vttk-dalen &apos;&quot;,&quot;ualen&quot;:&quot;&apos; ls_vttk-ualen &apos;&quot;,&apos;
+        &apos;&quot;stabf&quot;:&quot;&apos;  ls_vttk-stabf &apos;&quot;, &quot;dtabf&quot;:&quot;&apos; ls_vttk-dtabf &apos;&quot;,&quot;uzabf&quot;:&quot;&apos; ls_vttk-uzabf &apos;&quot;, &apos;
+        &apos;&quot;sttbg&quot;:&quot;&apos;  ls_vttk-sttbg &apos;&quot;, &quot;datbg&quot;:&quot;&apos; ls_vttk-datbg &apos;&quot;,&quot;uatbg&quot;:&quot;&apos; ls_vttk-uatbg &apos;&quot;, &apos;
+        &apos;&quot;stten&quot;:&quot;&apos;  ls_vttk-stten &apos;&quot;, &quot;daten&quot;:&quot;&apos; ls_vttk-daten &apos;&quot;,&quot;uaten&quot;:&quot;&apos; ls_vttk-uaten &apos;&quot; }&apos;
+             into l_json.
+
+    endif.
+  endif.
+* check the results.
+
+  write( l_json ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_DETAIL" VERSION="1" LANGU="E" DESCRIPT="Controller Class for YTRST" UUID="605C20EF3F9F2545A44A30C9AA3DA891" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_SHIP_DETAIL definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_DETAIL
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_DETAIL
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_DETAIL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_SHIP_DETAIL" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_SHIP_DETAIL" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data: lo_detail type ref to if_bsp_page,
+        l_tknum type string,
+        ls_vttk type vttk,
+        ls_tvrot type tvrot,
+        l_date type string,
+        l_status type string,
+        ls_lfa1 type lfa1.
+
+  lo_detail = create_view( view_name = &apos;detail.htm&apos; ).
+
+  l_tknum = request-&gt;get_form_field( name = &apos;tknum&apos; ).
+  l_status = request-&gt;get_form_field( name = &apos;status&apos; ).
+  l_date = request-&gt;get_form_field( name = &apos;date&apos; ).
+
+  lo_detail-&gt;set_attribute( name = &apos;loaddate&apos; value = l_date ).
+  lo_detail-&gt;set_attribute( name = &apos;loadstatus&apos; value = l_status ).
+
+  select single * from vttk into ls_vttk
+   where tknum = l_tknum.
+
+  lo_detail-&gt;set_attribute( name = &apos;shipment&apos; value = ls_vttk ).
+
+  select single * from tvrot into ls_tvrot
+   where spras = sy-langu
+     and route = ls_vttk-route.
+
+  lo_detail-&gt;set_attribute( name = &apos;tvrot&apos; value = ls_tvrot ).
+
+  select single * from lfa1 into ls_lfa1
+   where lifnr = ls_vttk-tdlnr.
+
+  lo_detail-&gt;set_attribute( name = &apos;lfa1&apos; value = ls_lfa1 ).
+
+  call_view( lo_detail ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_HOME" VERSION="1" LANGU="E" DESCRIPT="Controller Class for YTRST" UUID="0C53A492B1A8F6418B8B2CEF8905851A" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_SHIP_HOME definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_HOME
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_HOME
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_HOME
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_SHIP_HOME" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_SHIP_HOME" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data: view type ref to if_bsp_page,
+        l_str type string.
+
+  concatenate sy-datum(4) sy-datum+4(2) sy-datum+6(2) into l_str separated by &apos;-&apos;.
+
+  view = create_view( view_name = &apos;home.htm&apos; ).
+  view-&gt;set_attribute( name  = &apos;today&apos; value = l_str ).
+  call_view( view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_LIST" VERSION="1" LANGU="E" DESCRIPT="Controller Class for YTRST" UUID="6B9C45DDDAFC974C8160F7B31EB9A8FB" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_SHIP_LIST definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_LIST
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_LIST
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_LIST
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_SHIP_LIST" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_SHIP_LIST" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data:
+    lv_status type sttrg,
+    lv_datestr type string,
+    lv_y type char4,
+    lv_d type char2,
+    lv_m type char2,
+    lv_date type dplbg,
+    lv_str type string,
+    lt_vttk type standard table of vttk,
+    lt_shiplist type y_mw_demo_shiplist,
+    ls_shipitem type ymw_demo_shipitem,
+    lo_view type ref to if_bsp_page.
+
+  field-symbols:
+    &lt;ls_vttk&gt; type vttk.
+
+  lv_datestr = request-&gt;get_form_field( &apos;date&apos; ).
+  lv_status = request-&gt;get_form_field( &apos;status&apos; ).
+
+* build the sql query string
+  if lv_datestr is not initial.
+    split lv_datestr at &apos;-&apos; into lv_y lv_m lv_d.
+    concatenate lv_y lv_m lv_d into lv_date.
+    concatenate `DPLBG = &apos;` lv_date `&apos;` into lv_str respecting blanks.
+  endif.
+
+  if lv_status is not initial.
+    if lv_str is not initial.
+      concatenate lv_str &apos; AND &apos; into lv_str respecting blanks.
+    endif.
+    concatenate lv_str ` STTRG = &apos;` lv_status `&apos;` into lv_str respecting blanks.
+  endif.
+
+  select * from vttk into corresponding fields of table lt_vttk where (lv_str).
+
+  loop at lt_vttk assigning &lt;ls_vttk&gt;.
+    clear ls_shipitem.
+    ls_shipitem-tknum = &lt;ls_vttk&gt;-tknum.
+    ls_shipitem-route = &lt;ls_vttk&gt;-route.
+    ls_shipitem-tdlnr = &lt;ls_vttk&gt;-tdlnr.
+
+    select single name1 from lfa1 into ls_shipitem-name1
+       where lifnr = &lt;ls_vttk&gt;-tdlnr.
+
+    select single bezei from tvrot into ls_shipitem-bezei
+     where spras = sy-langu
+       and route = ls_shipitem-route.
+
+    append ls_shipitem to lt_shiplist.
+  endloop.
+
+
+  lo_view = create_view( view_name = &apos;list.htm&apos; ).
+  lo_view-&gt;set_attribute( name = &apos;shipments&apos; value = lt_shiplist ).
+  lo_view-&gt;set_attribute( name = &apos;loadstatus&apos; value = lv_status ).
+  lo_view-&gt;set_attribute( name = &apos;loaddate&apos; value = lv_datestr ).
+
+  call_view( lo_view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_LOG" VERSION="1" LANGU="E" DESCRIPT="Controller Class for YTRST" UUID="305B5F6BB2EC8E49BDEA1E89F9FBA630" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_SHIP_LOG definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_LOG
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_LOG
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_LOG
+*&quot;* do not include other source files here!!!
+private section.
+
+  methods UPDATE_TEXT
+    importing
+      !IV_TKNUM type STRING
+      !IV_TEXT type STRING
+    returning
+      value(RE_LINES) type TLINE_T .
+  methods READ_TEXT
+    importing
+      !IV_TKNUM type STRING
+    returning
+      value(RE_LINES) type TLINE_T .</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_SHIP_LOG" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_SHIP_LOG" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data: lo_log type ref to if_bsp_page,
+        ls_vttk type vttk,
+        l_tknum type string,
+        l_text type string,
+        l_date type string,
+        l_status type string,
+        lt_lines type tline_t.
+
+  lo_log = create_view( view_name = &apos;log.htm&apos; ).
+
+  l_tknum = request-&gt;get_form_field( name = &apos;tknum&apos; ).
+  l_status = request-&gt;get_form_field( name = &apos;status&apos; ).
+  l_date = request-&gt;get_form_field( name = &apos;date&apos; ).
+
+  lo_log-&gt;set_attribute( name = &apos;loaddate&apos; value = l_date ).
+  lo_log-&gt;set_attribute( name = &apos;loadstatus&apos; value = l_status ).
+
+  select single * from vttk into ls_vttk
+   where tknum = l_tknum.
+
+  if sy-subrc = 0.
+    lo_log-&gt;set_attribute( name = &apos;tknum&apos; value = l_tknum ).
+
+    if request-&gt;get_method( ) = &apos;POST&apos;.
+
+      l_text = request-&gt;get_form_field( name = &apos;logtext&apos; ).
+      lt_lines = update_text( iv_tknum = l_tknum iv_text = l_text ).
+    else.
+      lt_lines = read_text( iv_tknum = l_tknum ).
+    endif.
+    lo_log-&gt;set_attribute( name = &apos;log&apos; value = lt_lines ).
+
+  endif.
+
+  call_view( lo_log ).
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="READ_TEXT" VERSION="1" LANGU="E" EXPOSURE="0" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="READ_TEXT" SCONAME="IV_TKNUM" VERSION="1" LANGU="E" DESCRIPT="Shipment Number" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="READ_TEXT" SCONAME="RE_LINES" VERSION="1" LANGU="E" DESCRIPT="Text Lines_T" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="TLINE_T"/>
+   <source>method read_text.
+
+  data:
+    l_name type tdobname.
+
+  l_name = iv_tknum.
+
+  call function &apos;READ_TEXT&apos;
+    exporting
+      id                      = &apos;0001&apos;
+      language                = &apos;E&apos;
+      name                    = l_name
+      object                  = &apos;VTTK&apos;
+    tables
+      lines                   = re_lines
+    exceptions
+      id                      = 1
+      language                = 2
+      name                    = 3
+      not_found               = 4
+      object                  = 5
+      reference_check         = 6
+      wrong_access_to_archive = 7
+      others                  = 8.
+
+  if sy-subrc &lt;&gt; 0.
+    clear re_lines.
+  endif.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="UPDATE_TEXT" VERSION="1" LANGU="E" EXPOSURE="0" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="UPDATE_TEXT" SCONAME="IV_TKNUM" VERSION="1" LANGU="E" DESCRIPT="Shipment Number" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="UPDATE_TEXT" SCONAME="IV_TEXT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_LOG" CMPNAME="UPDATE_TEXT" SCONAME="RE_LINES" VERSION="1" LANGU="E" DESCRIPT="Text Lines_T" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="TLINE_T"/>
+   <source>method UPDATE_TEXT.
+  data: ls_line type tline,
+        ls_head type thead,
+        lt_lines type tline_t.
+
+  lt_lines = read_text( iv_tknum = iv_tknum ).
+
+  if iv_text is not initial.
+
+    ls_head-tdobject = &apos;VTTK&apos;.
+    ls_head-tdid = &apos;0001&apos;.
+    ls_head-tdspras = &apos;E&apos;.
+    ls_head-tdname = iv_tknum.
+
+* needs to account for lines with more than 132 chars
+    ls_line-tdline = iv_text.
+    append ls_line to lt_lines.
+
+    call function &apos;SAVE_TEXT&apos;
+      exporting
+        header          = ls_head
+        savemode_direct = abap_true
+      tables
+        lines           = lt_lines
+      exceptions
+        id              = 1
+        language        = 2
+        name            = 3
+        object          = 4
+        others          = 5.
+    if sy-subrc = 0.
+      commit work.
+    endif.
+  endif.
+
+  re_lines[] = lt_lines[].
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_SHIP_UTIL" VERSION="1" LANGU="E" UUID="A14CCE894C0C474B927B9DB2DBFE2A7E" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+  <publicSection>class Y_MW_DEMO_SHIP_UTIL definition
+  public
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_SHIP_UTIL
+*&quot;* do not include other source files here!!!
+public section.
+
+  class-methods STRIP
+    importing
+      !IV_STR type ANY
+    returning
+      value(RE_STR) type STRING .
+  class-methods DATE_FORMAT
+    importing
+      !IV_STR type ANY
+    returning
+      value(RE_STR) type STRING .
+  class-methods TIME_FORMAT
+    importing
+      !IV_STR type ANY
+    returning
+      value(RE_STR) type STRING .
+  class-methods DOMAIN_DESC
+    importing
+      !DOMAIN type CSEQUENCE
+      !VALUE type CSEQUENCE
+    returning
+      value(VALUE_DESC) type STRING .
+  class-methods MAKTX
+    importing
+      !MATNR type CSEQUENCE
+    returning
+      value(MAKTX) type STRING .
+  class-methods CNAME
+    importing
+      !KUNNR type CSEQUENCE
+    returning
+      value(NAME) type STRING .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_TRST_UTIL
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_TRST_UTIL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="CNAME" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="6 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="CNAME" SCONAME="KUNNR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="CNAME" SCONAME="NAME" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method CNAME.
+
+  select single name1 into name from kna1 where kunnr = kunnr.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DATE_FORMAT" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DATE_FORMAT" SCONAME="IV_STR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DATE_FORMAT" SCONAME="RE_STR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method DATE_FORMAT.
+
+  data: l_str type string.
+
+  if iv_str is initial.
+*   date with just zeros
+    l_str = &apos;&apos;.
+  else.
+    l_str = iv_str.
+  endif.
+
+  if strlen( l_str ) = 8.
+    concatenate l_str(4) &apos;.&apos; l_str+4(2) &apos;.&apos; l_str+6(2)
+           into re_str.
+  else.
+    re_str = l_str.
+  endif.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DOMAIN_DESC" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DOMAIN_DESC" SCONAME="DOMAIN" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DOMAIN_DESC" SCONAME="VALUE" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="DOMAIN_DESC" SCONAME="VALUE_DESC" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method DOMAIN_DESC.
+
+  data: l_name type domname,
+        l_text type val_text.
+
+  clear value_desc.
+
+  l_name = domain.
+
+  call function &apos;STF4_GET_DOMAIN_VALUE_TEXT&apos;
+    exporting
+      iv_domname      = l_name
+      iv_value        = value
+    importing
+      ev_value_text   = l_text
+    exceptions
+      value_not_found = 1
+      others          = 2.
+
+  if sy-subrc = 0.
+    value_desc = l_text.
+  endif.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="MAKTX" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="MAKTX" SCONAME="MATNR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="MAKTX" SCONAME="MAKTX" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method MAKTX.
+
+  select single maktx into maktx
+    from makt
+   where matnr = matnr
+     and spras = sy-langu.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="STRIP" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="STRIP" SCONAME="IV_STR" VERSION="1" LANGU="E" DESCRIPT="Vorschlagswerte bei Anlage von Debitoren aus Workbench" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="STRIP" SCONAME="RE_STR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method STRIP.
+
+  data: l_str type string.
+
+
+  l_str = iv_str.
+
+  shift l_str left deleting leading space.
+  shift l_str left deleting leading &apos;0&apos;.
+
+  re_str = l_str.
+
+endmethod.</source>
+  </method>
+  <method CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="TIME_FORMAT" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="TIME_FORMAT" SCONAME="IV_STR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+   <parameter CLSNAME="Y_MW_DEMO_SHIP_UTIL" CMPNAME="TIME_FORMAT" SCONAME="RE_STR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+   <source>method TIME_FORMAT.
+
+  data: l_str type string.
+
+  if iv_str is initial.
+    l_str = &apos;&apos;.
+  else.
+    l_str = iv_str.
+  endif.
+
+  if strlen( l_str ) = 6.
+    concatenate l_str(2) &apos;:&apos; l_str+2(2) &apos;:&apos; l_str+4(2)
+     into re_str.
+  else.
+    re_str = l_str.
+  endif.
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <SICF ICF_NAME="YMWDEMOSHIP" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICFNODGUID="3CQWZFQ797X4PDBPOMXWRUD8U" ICFCHILDNO="0 " ICFALIASNO="0 " ICF_OPTION="0 " ICF_TIME="000000" ICF_CUSER="PLIMA" ICF_CDATE="20120131" ICF_MUSER="PLIMA" ICF_MDATE="20120131" ICF_AUTHRC="0" ORIG_NAME="ymwdemoship">
+  <icfdocu ICF_NAME="YMWDEMOSHIP" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICF_LANGU="E" ICF_DOCU="Mobile App to set transportation status"/>
+ </SICF>
+ <SMIM PATH="/SAP/BC/BSP/SAP/ymwdemoship" ID="137A0B5E5A70A440A6449580AA3AE1D0" CLASS="M_FOLDER" SIZE="0 ">UEsDBBQAAAAAAOdrP0AAAAAAAAAAAAAAAAAAAAAAUEsBAhMAFAAAAAAA52s/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFBLBQYAAAAAAQABAC4AAAAeAAAAAAA=</SMIM>
+ <TABL TABNAME="YMW_DEMO_SHIPITEM" DDLANGUAGE="E" TABCLASS="INTTAB" DATMIN="0000000000" DATMAX="0000000000" DATAVG="0000000000" DDTEXT="Shipment item" AUTHCLASS="00" AS4USER="PLIMA" AS4DATE="20120131" AS4TIME="115134" PROZPUFF="000" EXCLASS="4">
+  <dd09l AS4VERS="0000" SCHFELDANZ="000" AS4DATE="00000000" AS4TIME="000000"/>
+  <dd03p TABNAME="YMW_DEMO_SHIPITEM" FIELDNAME="TKNUM" DDLANGUAGE="E" POSITION="0001" ROLLNAME="TKNUM" ADMINFIELD="0" INTTYPE="C" INTLEN="000020" DOMNAME="TKNUM" ROUTPUTLEN="000000" MEMORYID="TNR" HEADLEN="10" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" DTELMASTER="D" DATATYPE="CHAR" LENG="000010" OUTPUTLEN="000010" DECIMALS="000000" ENTITYTAB="VTTK" CONVEXIT="ALPHA" MASK="  CHARE" MASKLEN="0000" DDTEXT="Shipment Number" REPTEXT="Shipment" SCRTEXT_S="Shipment" SCRTEXT_M="Shipment Number" SCRTEXT_L="Shipment Number" DOMNAME3L="TKNUM" SHLPORIGIN="D" SHLPNAME="SD_F4_SHP_ID" SHLPFIELD="TKNUM" DEPTH="00" COMPTYPE="E" DEFFDNAME="SHIPMENTNUM" EXCLASS="0" DBPOSITION="0000"/>
+  <dd03p TABNAME="YMW_DEMO_SHIPITEM" FIELDNAME="ROUTE" DDLANGUAGE="E" POSITION="0002" ROLLNAME="ROUTR" ADMINFIELD="0" INTTYPE="C" INTLEN="000012" DOMNAME="ROUTE" ROUTPUTLEN="000000" LOGFLAG="X" HEADLEN="06" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" DTELMASTER="D" DATATYPE="CHAR" LENG="000006" OUTPUTLEN="000006" DECIMALS="000000" ENTITYTAB="TVRO" MASK="  CHARE" MASKLEN="0000" DDTEXT="Shipment route" REPTEXT="Route" SCRTEXT_S="ShpmtRoute" SCRTEXT_M="Shipment route" SCRTEXT_L="Shipment route" DOMNAME3L="ROUTE" SHLPORIGIN="D" SHLPNAME="VMTR" SHLPFIELD="ROUTE" DEPTH="00" COMPTYPE="E" EXCLASS="0" DBPOSITION="0000"/>
+  <dd03p TABNAME="YMW_DEMO_SHIPITEM" FIELDNAME="TDLNR" DDLANGUAGE="E" POSITION="0003" ROLLNAME="TDLNR" ADMINFIELD="0" INTTYPE="C" INTLEN="000020" DOMNAME="LIFNR" ROUTPUTLEN="000000" MEMORYID="LIF" LOGFLAG="X" HEADLEN="10" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" DTELMASTER="D" DATATYPE="CHAR" LENG="000010" OUTPUTLEN="000010" DECIMALS="000000" ENTITYTAB="LFA1" CONVEXIT="ALPHA" MASK="  CHARE" MASKLEN="0000" DDTEXT="Number of forwarding agent" REPTEXT="ServcAgent" SCRTEXT_S="ServcAgent" SCRTEXT_M="Service agent" SCRTEXT_L="Service agent" DOMNAME3L="LIFNR" SHLPORIGIN="D" SHLPNAME="F4_CARRIERS" SHLPFIELD="LIFNR" DEPTH="00" COMPTYPE="E" EXCLASS="0" DBPOSITION="0000"/>
+  <dd03p TABNAME="YMW_DEMO_SHIPITEM" FIELDNAME="NAME1" DDLANGUAGE="E" POSITION="0004" ROLLNAME="NAME1_GP" ADMINFIELD="0" INTTYPE="C" INTLEN="000070" DOMNAME="NAME" ROUTPUTLEN="000000" LOGFLAG="X" HEADLEN="35" SCRLEN1="10" SCRLEN2="12" SCRLEN3="20" DTELMASTER="D" DATATYPE="CHAR" LENG="000035" OUTPUTLEN="000035" DECIMALS="000000" LOWERCASE="X" MASK="  CHARE" MASKLEN="0000" DDTEXT="Name 1" REPTEXT="Name 1" SCRTEXT_S="Name" SCRTEXT_M="Name" SCRTEXT_L="Name" DOMNAME3L="NAME" DEPTH="00" COMPTYPE="E" DEFFDNAME="NAME" EXCLASS="0" DBPOSITION="0000"/>
+  <dd03p TABNAME="YMW_DEMO_SHIPITEM" FIELDNAME="BEZEI" DDLANGUAGE="E" POSITION="0005" ROLLNAME="ROUTBEZ" ADMINFIELD="0" INTTYPE="C" INTLEN="000080" DOMNAME="TEXT40" ROUTPUTLEN="000000" HEADLEN="25" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" DTELMASTER="D" DATATYPE="CHAR" LENG="000040" OUTPUTLEN="000040" DECIMALS="000000" LOWERCASE="X" MASK="  CHARE" MASKLEN="0000" DDTEXT="Description of Route" REPTEXT="Description" SCRTEXT_S="Name" SCRTEXT_M="Description" SCRTEXT_L="Description" DOMNAME3L="TEXT40" DEPTH="00" COMPTYPE="E" EXCLASS="0" DBPOSITION="0000"/>
+ </TABL>
+ <TTYP TYPENAME="Y_MW_DEMO_SHIPLIST" DDLANGUAGE="E" ROWTYPE="YMW_DEMO_SHIPITEM" ROWKIND="S" DATATYPE="STRU" LENG="000000" DECIMALS="000000" ACCESSMODE="T" KEYDEF="D" KEYKIND="N" KEYFDCOUNT="0000" AS4USER="PLIMA" AS4DATE="20120131" AS4TIME="115153" DDTEXT="List of shipments" TYPELEN="000202" CTLENG="000000" CTDECIMALS="000000" REFTYPE="C" OCCURS="00000"/>
+ <WAPA APPLNAME="YMWDEMOSHIP" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" APPLEXT="ymwdemoship" DEVCLASS="$TMP" ORIGLANG="E" MODIFLANG="E" TEXT="Mobile App to set transportation status">
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="ACTION.DO" PAGENAME="action.do" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="Y_MW_DEMO_SHIP_ACTION" GENDATE="20120131" GENTIME="112549" PAGETYPE="C" CHANGETIME="112330" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Ajax actions on the shipment status"/>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.DO" PAGENAME="detail.do" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="Y_MW_DEMO_SHIP_DETAIL" GENDATE="20120131" GENTIME="112549" PAGETYPE="C" CHANGETIME="112351" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Detail page of a shipment document"/>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" PAGENAME="detail.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O22UW1BX884PH8O2X0A6AK53DVP" GENDATE="20120131" GENTIME="122133" PAGETYPE="V" CHANGETIME="122132" CONTROLLERURL="Y_MW_DEMO_SHIP_DETAIL" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Detail view of a shipment">
+   <layout>&lt;%@page language=&quot;abap&quot; %&gt;
+&lt;%@include file=&quot;header.htm&quot; %&gt;
+&lt;div data-role=&quot;page&quot; id=&quot;detailPage&quot;&gt;
+&lt;style&gt;
+ul#itemlist2 li p { margin-top: 0; }
+p.dt { margin: 1em 0 !important; }
+&lt;/style&gt;
+&lt;script&gt;
+function activate_button(btn_id) {
+  $(btn_id).attr(&apos;data-icon&apos;,&apos;check&apos;);
+  $(btn_id + &apos; span.ui-icon&apos;).removeClass(&quot;ui-icon-arrow-r&quot;).addClass(&quot;ui-icon-check&quot;);
+  $(btn_id).attr(&apos;data-theme&apos;,&apos;b&apos;).removeClass(&quot;ui-btn-up-c&quot;).addClass(&quot;ui-btn-up-b&quot;);
+    $(btn_id).removeClass(&quot;ui-btn-hover-c&quot;).addClass(&quot;ui-btn-hover-b&quot;);
+}
+function deactivate_button(btn_id) {
+  $(btn_id).attr(&apos;data-icon&apos;,&apos;arrow-r&apos;);
+  $(btn_id + &apos; span.ui-icon&apos;).removeClass(&quot;ui-icon-check&quot;).addClass(&quot;ui-icon-arrow-r&quot;);
+  $(btn_id).attr(&apos;data-theme&apos;,&apos;c&apos;).removeClass(&quot;ui-btn-up-b&quot;).addClass(&quot;ui-btn-up-c&quot;);
+  $(btn_id).removeClass(&quot;ui-btn-hover-b&quot;).addClass(&quot;ui-btn-hover-c&quot;);
+}
+function cleard( d ) {
+  if ( d == &apos;00000000&apos; || d == &apos;000000&apos; ) {
+    return &apos;&apos;;
+  } else {
+    return formatd(d);
+  }
+}
+function formatd( d ) {
+  if (d.length == 8) {
+    return d.substring(0,4) + &quot;.&quot; + d.substring(4,6) + &quot;.&quot; + d.substring(6);
+  } else if (d.length == 6) {
+    return d.substring(0,2) + &quot;:&quot; + d.substring(2,4) + &quot;:&quot; + d.substring(4);
+  } else {
+    return d;
+  }
+}
+$(&apos;#detailPage&apos;).one(&apos;pageinit&apos;, function(event) {
+  $(&apos;#btn_streg&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;streg&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_dareg p&apos;).text(cleard(data.dareg));
+      $(&apos;#s_uareg p&apos;).text(cleard(data.uareg));
+      if (data.streg == &apos;X&apos;) { activate_button(&apos;#btn_streg&apos;); } else { deactivate_button(&apos;#btn_streg&apos;);}
+    return false;
+    });
+  });
+  $(&apos;#btn_stlbg&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;stlbg&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_dalbg p&apos;).text(cleard(data.dalbg));
+      $(&apos;#s_ualbg p&apos;).text(cleard(data.ualbg));
+      if (data.stlbg == &apos;X&apos;) { activate_button(&apos;#btn_stlbg&apos;); } else { deactivate_button(&apos;#btn_stlbg&apos;);}
+    return false;
+    })
+  });
+  $(&apos;#btn_stlad&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;stlad&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_dalen p&apos;).text(cleard(data.dalen));
+      $(&apos;#s_ualen p&apos;).text(cleard(data.ualen));
+      if (data.stlad == &apos;X&apos;) { activate_button(&apos;#btn_stlad&apos;); } else { deactivate_button(&apos;#btn_stlad&apos;);}
+    return false;
+    });
+  });
+  $(&apos;#btn_stabf&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;stabf&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_dtabf p&apos;).text(cleard(data.dtabf));
+      $(&apos;#s_uzabf p&apos;).text(cleard(data.uzabf));
+      if (data.stabf == &apos;X&apos;) { activate_button(&apos;#btn_stabf&apos;); } else { deactivate_button(&apos;#btn_stabf&apos;);}
+    return false;
+    });
+  });
+  $(&apos;#btn_sttbg&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;sttbg&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_datbg p&apos;).text(cleard(data.datbg));
+      $(&apos;#s_uatbg p&apos;).text(cleard(data.uatbg));
+      if (data.sttbg == &apos;X&apos;) { activate_button(&apos;#btn_sttbg&apos;); } else { deactivate_button(&apos;#btn_sttbg&apos;);}
+    return false;
+    });
+  });
+  $(&apos;#btn_stten&apos;).click( function() {
+    $.getJSON(&apos;action.do&apos;, {&apos;mode&apos;:&apos;stten&apos;, &apos;sid&apos;:&apos;&lt;%= shipment-tknum %&gt;&apos;}, function(data) {
+      $(&apos;#s_daten p&apos;).text(cleard(data.daten));
+      $(&apos;#s_uaten p&apos;).text(cleard(data.uaten));
+      if (data.stten == &apos;X&apos;) { activate_button(&apos;#btn_stten&apos;); } else { deactivate_button(&apos;#btn_stten&apos;);}
+    return false;
+    });
+  });
+});
+&lt;/script&gt;
+   &lt;div data-role=&quot;header&quot; data-position=&quot;inline&quot;&gt;
+     &lt;h1&gt;Shipment &lt;%= y_mw_demo_ship_util=&gt;strip( shipment-tknum ) %&gt;&lt;/h1&gt;
+  &lt;a href=&quot;list.do?date=&lt;%= loaddate %&gt;&amp;status=&lt;%= loadstatus %&gt;&quot; data-role=&quot;button&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-l&quot; data-inline=&quot;true&quot; class=&quot;back-button&quot; data-direction=&quot;reverse&quot;&gt;Back&lt;/a&gt;
+  &lt;a href=&quot;log.do?tknum=&lt;%= shipment-tknum %&gt;&amp;date=&lt;%= loaddate %&gt;&amp;status=&lt;%= loadstatus %&gt;&quot; data-icon=&quot;grid&quot; class=&quot;ui-btn-right&quot;&gt;Log&lt;/a&gt;
+   &lt;/div&gt;
+   &lt;div data-role=&quot;content&quot;&gt;
+      &lt;ul id=&quot;itemlist2&quot; data-role=&quot;listview&quot; data-theme=&quot;c&quot;&gt;
+    &lt;li data-role=&quot;list-divider&quot;&gt;Details&lt;/li&gt;
+    &lt;li&gt;&lt;p&gt;Shipment: &lt;%= y_mw_demo_ship_util=&gt;strip( shipment-tknum ) %&gt; &lt;/p&gt;
+        &lt;p&gt;Carrier: &lt;%= y_mw_demo_ship_util=&gt;strip( shipment-tdlnr ) %&gt; &lt;%= lfa1-name1 %&gt;&lt;/p&gt;
+        &lt;p&gt;Route: &lt;%= shipment-route %&gt; &lt;%= tvrot-bezei %&gt; &lt;/p&gt; &lt;/li&gt;
+    &lt;li data-role=&quot;list-divider&quot;&gt;Shipment Status&lt;/li&gt;
+    &lt;li&gt;&lt;div class=&quot;ui-grid-a&quot;&gt;
+        &lt;div class=&quot;ui-block-a&quot;&gt;
+          Realization times
+        &lt;/div&gt;
+        &lt;div class=&quot;ui-block-b&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;div class=&quot;ui-grid-a&quot;&gt;
+        &lt;div class=&quot;ui-block-a&quot;&gt;
+        &lt;div class=&quot;ui-grid-a&quot;&gt;
+          &lt;div id=&quot;s_dareg&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+            &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-dareg ) %&gt; &lt;/p&gt;&lt;/div&gt;
+          &lt;div id=&quot;s_uareg&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+            &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-uareg ) %&gt; &lt;/p&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;ui-block-b&quot;&gt;
+          &lt;a id=&quot;btn_streg&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-streg = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+      &gt;Check In&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;div class=&quot;ui-grid-a&quot;&gt;
+    &lt;div class=&quot;ui-block-a&quot;&gt;
+    &lt;div class=&quot;ui-grid-a&quot;&gt;
+      &lt;div id=&quot;s_dalbg&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-dalbg ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+      &lt;div id=&quot;s_ualbg&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-ualbg ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-block-b&quot;&gt;
+      &lt;a id=&quot;btn_stlbg&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-stlbg = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+      &gt;Load Start&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;div class=&quot;ui-grid-a&quot;&gt;
+    &lt;div class=&quot;ui-block-a&quot;&gt;
+    &lt;div class=&quot;ui-grid-a&quot;&gt;
+      &lt;div id=&quot;s_dalen&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-dalen ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+      &lt;div id=&quot;s_ualen&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-ualen ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-block-b&quot;&gt;
+      &lt;a id=&quot;btn_stlad&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-stlad = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+      &gt;Load End&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;div class=&quot;ui-grid-a&quot;&gt;
+    &lt;div class=&quot;ui-block-a&quot;&gt;
+    &lt;div class=&quot;ui-grid-a&quot;&gt;
+      &lt;div id=&quot;s_dtabf&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-dtabf ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+      &lt;div id=&quot;s_uzabf&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-uzabf ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-block-b&quot;&gt;
+      &lt;a id=&quot;btn_stabf&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-stabf = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+      &gt;Complete&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;div class=&quot;ui-grid-a&quot;&gt;
+    &lt;div class=&quot;ui-block-a&quot;&gt;
+    &lt;div class=&quot;ui-grid-a&quot;&gt;
+      &lt;div id=&quot;s_datbg&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-datbg ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+      &lt;div id=&quot;s_uatbg&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-uatbg ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-block-b&quot;&gt;
+      &lt;a id=&quot;btn_sttbg&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-sttbg = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+      &gt;Start&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;div class=&quot;ui-grid-a&quot;&gt;
+    &lt;div class=&quot;ui-block-a&quot;&gt;
+    &lt;div class=&quot;ui-grid-a&quot;&gt;
+      &lt;div id=&quot;s_daten&quot; class=&quot;ui-block-a&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;date_format( shipment-daten ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+      &lt;div id=&quot;s_uaten&quot; class=&quot;ui-block-b&quot;&gt;&lt;p class=&quot;dt&quot;&gt;
+        &lt;%= y_mw_demo_ship_util=&gt;time_format( shipment-uaten ) %&gt;
+        &lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;ui-block-b&quot;&gt;
+      &lt;a id=&quot;btn_stten&quot; href=&quot;&quot; data-role=&quot;button&quot;
+&lt;%
+  if shipment-stten = &apos;X&apos;.
+%&gt;
+data-icon=&quot;check&quot; data-theme=&quot;b&quot;
+&lt;%
+  else.
+%&gt;
+data-icon=&quot;arrow-r&quot;
+&lt;%
+  endif.
+%&gt;
+          &gt;End&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/li&gt;
+     &lt;/ul&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+&lt;%@include file=&quot;footer.htm&quot; %&gt;</layout>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" COMPNAME="LFA1" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="LFA1" ALIASNAME="lfa1" TEXT="Vendor Master (General Section)"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" COMPNAME="LOADDATE" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loaddate"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" COMPNAME="LOADSTATUS" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loadstatus"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" COMPNAME="SHIPMENT" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="VTTK" ALIASNAME="shipment" TEXT="Shipment Header"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="DETAIL.HTM" COMPNAME="TVROT" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TVROT" ALIASNAME="tvrot" TEXT="Routes: Texts"/>
+  </page>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="FOOTER.HTM" PAGENAME="footer.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O262SSLISNAEYG61K5SQH51PU6J" GENDATE="20120131" GENTIME="112549" PAGETYPE="X" CHANGETIME="111827" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Footer">
+   <layout>&lt;%@page language=&quot;ABAP&quot;%&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</layout>
+  </page>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="HEADER.HTM" PAGENAME="header.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O2732S5QAL8RF6J799LIBOBEN20" GENDATE="20120131" GENTIME="112549" PAGETYPE="X" CHANGETIME="111827" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Header">
+   <layout>&lt;%@page language=&quot;ABAP&quot;%&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+   &lt;meta charset=&quot;utf-8&quot;&gt;
+   &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+
+   &lt;title&gt;SAP Shipments&lt;/title&gt;
+
+   &lt;link rel=&quot;stylesheet&quot; href=&quot;http://code.jquery.com/mobile/1.0rc3/jquery.mobile-1.0rc3.min.css&quot; /&gt;
+   &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://dev.jtsage.com/cdn/datebox/latest/jquery.mobile.datebox.min.css&quot; /&gt;
+
+   &lt;script src=&quot;http://code.jquery.com/jquery-1.6.4.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobile-1.0.mobiweaver.js&quot;&gt;&lt;/script&gt;
+   &lt;script type=&quot;text/javascript&quot; src=&quot;http://dev.jtsage.com/cdn/datebox/latest/jquery.mobile.datebox.min.js&quot;&gt;&lt;/script&gt;
+   &lt;script type=&quot;text/javascript&quot; src=&quot;http://dev.jtsage.com/cdn/datebox/i8n/jquery.mobile.datebox.i8n.en.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;</layout>
+  </page>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="HOME.DO" PAGENAME="home.do" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="Y_MW_DEMO_SHIP_HOME" GENDATE="20120131" GENTIME="112549" PAGETYPE="C" CHANGETIME="112409" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Selection Screen"/>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="HOME.HTM" PAGENAME="home.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O271K0QVF78CZ0RQW9GAT8K59PL" GENDATE="20120131" GENTIME="122020" PAGETYPE="V" CHANGETIME="120512" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E">
+   <layout>&lt;%@page language=&quot;abap&quot;%&gt;
+&lt;%@ include file=&apos;header.htm&apos; %&gt;
+
+&lt;div data-role=&quot;page&quot; id=&quot;selectionPage&quot;&gt;
+    &lt;div data-role=&quot;header&quot;&gt;
+        &lt;h1&gt;SAP Shipments&lt;/h1&gt;
+        &lt;a href=&quot;#aboutPage&quot; data-icon=&quot;info&quot; class=&quot;ui-btn-right&quot;
+           data-rel=&quot;dialog&quot; data-transition=&quot;slidedown&quot;&gt;About&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div data-role=&quot;content&quot;&gt;
+
+        &lt;form action=&quot;list.do&quot; method=&quot;get&quot;&gt;
+        &lt;!-- class=&quot;ui-hidden-accessible&quot; --&gt;
+        &lt;fieldset&gt;
+        &lt;div data-role=&quot;fieldcontain&quot;&gt;
+            &lt;label for=&quot;date&quot;&gt;Date:&lt;/label&gt;
+            &lt;input id=&quot;date&quot; type=&quot;date&quot; name=&quot;date&quot; value=&quot;&lt;%= today %&gt;&quot; data-role=&quot;datebox&quot;
+   data-options=&apos;{&quot;mode&quot;: &quot;calbox&quot;, &quot;pickPageTheme&quot;: &quot;a&quot;, &quot;pickPageHighButtonTheme&quot;: &quot;d&quot;}&apos;&gt;
+        &lt;/div&gt;
+
+        &lt;div data-role=&quot;fieldcontain&quot;&gt;
+            &lt;label for=&quot;status&quot;&gt;Status:&lt;/label&gt;
+            &lt;select id=&quot;status&quot; name=&quot;status&quot;&gt;
+                &lt;option value=&quot;&quot;&gt;Choose status...&lt;/option&gt;
+                &lt;option value=&quot;0&quot;&gt;Planned&lt;/option&gt;
+                &lt;option value=&quot;1&quot;&gt;Planning completed&lt;/option&gt;
+                &lt;option value=&quot;2&quot;&gt;Check-in&lt;/option&gt;
+                &lt;option value=&quot;3&quot;&gt;Loading start&lt;/option&gt;
+                &lt;option value=&quot;4&quot;&gt;Loading end&lt;/option&gt;
+                &lt;option value=&quot;5&quot;&gt;Shipment completion&lt;/option&gt;
+                &lt;option value=&quot;6&quot;&gt;Shipment start&lt;/option&gt;
+                &lt;option value=&quot;7&quot;&gt;Shipment end&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/div&gt;
+        &lt;/fieldset&gt;
+        &lt;fieldset&gt;
+            &lt;button type=&quot;submit&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-r&quot; data-iconpos=&quot;right&quot;&gt;List&lt;/button&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div data-role=&quot;page&quot; id=&quot;aboutPage&quot; data-theme=&quot;a&quot;&gt;
+  &lt;div data-role=&quot;header&quot;&gt;
+        &lt;h1&gt;About&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;div data-role=&quot;content&quot;&gt;
+    &lt;p&gt;SAP Shipment Monitor Mobile&lt;/p&gt;
+    &lt;p&gt;HTML5 mobile app for monitoring shipments and setting status and log information. Built using SAP BSP and jQueryMobile.&lt;/p&gt;
+    &lt;p&gt;&amp;copy; mobiweaver project 2011&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;%@ include file=&apos;footer.htm&apos; %&gt;</layout>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="HOME.HTM" COMPNAME="TODAY" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="today" TEXT="Today date formatted"/>
+  </page>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="LIST.DO" PAGENAME="list.do" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="Y_MW_DEMO_SHIP_LIST" GENDATE="20120131" GENTIME="112549" PAGETYPE="C" CHANGETIME="112424" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Listing of shipments"/>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="LIST.HTM" PAGENAME="list.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O20H78P8DZUWPSK653DEB5RMK2U" GENDATE="20120131" GENTIME="122020" PAGETYPE="V" CHANGETIME="120946" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="List of shipments">
+   <layout>&lt;%@page language=&quot;abap&quot;%&gt;
+&lt;% field-symbols: &lt;ship&gt; type ymw_demo_shipitem.
+%&gt;
+&lt;%@ include file=&apos;header.htm&apos; %&gt;
+
+
+
+&lt;div data-role=&quot;page&quot; id=&quot;listPage&quot;&gt;
+
+   &lt;div data-role=&quot;header&quot;&gt;
+      &lt;h1&gt;SAP Shipments&lt;/h1&gt;
+    &lt;a href=&quot;home.do&quot; data-role=&quot;button&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-l&quot; data-inline=&quot;true&quot; class=&quot;back-button&quot; data-direction=&quot;reverse&quot;&gt;Back&lt;/a&gt;
+   &lt;/div&gt;
+
+   &lt;div data-role=&quot;content&quot;&gt;
+      &lt;ul id=&quot;itemlist&quot; data-role=&quot;listview&quot; data-theme=&quot;c&quot; data-filter=&quot;true&quot; data-filter-placeholder=&quot;Filter Shipments...&quot;&gt;
+           &lt;% loop at me-&gt;shipments assigning &lt;ship&gt;. %&gt;
+
+            &lt;li&gt;&lt;a data-transition=&quot;slide&quot;
+                 href=&quot;detail.do?tknum=&lt;%= &lt;ship&gt;-tknum %&gt;&amp;date=&lt;%= loaddate %&gt;&amp;status=&lt;%= loadstatus %&gt;&quot;&gt;
+                  &lt;h3&gt;&lt;%= &lt;ship&gt;-tknum %&gt; &lt;%= &lt;ship&gt;-name1 %&gt;&lt;/h3&gt;
+                  &lt;p&gt;&lt;%= &lt;ship&gt;-route %&gt; &lt;%= &lt;ship&gt;-bezei %&gt; | &lt;%= &lt;ship&gt;-tdlnr %&gt;&lt;/p&gt;
+            &lt;/a&gt;&lt;/li&gt;
+        &lt;% endloop. %&gt;
+      &lt;/ul&gt;
+   &lt;/div&gt;
+
+&lt;%@ include file=&apos;footer.htm&apos; %&gt;</layout>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LIST.HTM" COMPNAME="LOADDATE" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loaddate"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LIST.HTM" COMPNAME="LOADSTATUS" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loadstatus"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LIST.HTM" COMPNAME="SHIPMENTS" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="Y_MW_DEMO_SHIPLIST" ALIASNAME="shipments" TEXT="Shipment Header"/>
+  </page>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.DO" PAGENAME="log.do" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="Y_MW_DEMO_SHIP_LOG" GENDATE="20120131" GENTIME="112549" PAGETYPE="C" CHANGETIME="112442" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Shipment log"/>
+  <page APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.HTM" PAGENAME="log.htm" AUTHOR="PLIMA" CREATEDON="20120131" CHANGEDBY="PLIMA" CHANGEDON="20120131" IMPLCLASS="CL_O291TG1OMNJE9FAVH59S48U8YH0" GENDATE="20120131" GENTIME="122157" PAGETYPE="V" CHANGETIME="122155" CONTROLLERURL="Y_MW_DEMO_SHIP_LOG" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Shipment log">
+   <layout>&lt;%@page language=&quot;abap&quot;%&gt;
+
+&lt;%@ include file=&quot;header.htm&quot; %&gt;
+
+&lt;div data-role=&quot;page&quot; id=&quot;logPage&quot;&gt;
+  &lt;div data-role=&quot;header&quot;&gt;
+     &lt;h1&gt;Log &lt;%= y_mw_demo_ship_util=&gt;strip( tknum ) %&gt;&lt;/h1&gt;
+  &lt;a href=&quot;detail.do?tknum=&lt;%= tknum %&gt;&amp;date=&lt;%= loaddate %&gt;&amp;status=&lt;%= loadstatus %&gt;&quot; data-role=&quot;button&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-l&quot; data-inline=&quot;true&quot; class=&quot;back-button&quot; data-direction=&quot;reverse&quot;&gt;Back&lt;/a&gt;
+   &lt;/div&gt;
+
+   &lt;div data-role=&quot;content&quot;&gt;
+     &lt;p id=&quot;logcontent&quot;&gt;&lt;% if log is not initial. %&gt;
+      &lt;% field-symbols &lt;l_line&gt; type tline.
+       loop at log assigning &lt;l_line&gt;. %&gt;
+       &lt;%= &lt;l_line&gt;-tdline %&gt;&lt;br /&gt;
+      &lt;% endloop. %&gt;
+    &lt;% else. %&gt;The log has not yet been updated.&lt;% endif. %&gt;&lt;/p&gt;
+   &lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+    &lt;textarea name=&quot;logtext&quot; id=&quot;logtext&quot;&gt;&lt;/textarea&gt;
+    &lt;button type=&quot;submit&quot; data-theme=&quot;b&quot; name=&quot;submit&quot; value=&quot;submit-value&quot;&gt;Save&lt;/button&gt;
+     &lt;/form&gt;
+   &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;%@ include file=&quot;footer.htm&quot; %&gt;</layout>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.HTM" COMPNAME="LOADDATE" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loaddate"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.HTM" COMPNAME="LOADSTATUS" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="loadstatus"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.HTM" COMPNAME="LOG" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TLINE_T" ALIASNAME="log" TEXT="Text field"/>
+   <parameter APPLNAME="YMWDEMOSHIP" PAGEKEY="LOG.HTM" COMPNAME="TKNUM" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TKNUM" ALIASNAME="tknum" TEXT="Shipment Number"/>
+  </page>
+ </WAPA>
+</nugget>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-16"?>
+<nugget name="MOBIWEAVER_SAMPLES_NWDEV.NUGG">
+ <CLAS CLSNAME="Y_MW_DEMO_TCODE_LIST" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwdemotcode" UUID="E148DBCF671EA8F1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDON="20120127" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
+  <publicSection>class Y_MW_DEMO_TCODE_LIST definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_TCODE_LIST
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_MW_DEMO_TCODE_LIST
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_MW_DEMO_TCODE_LIST
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_TCODE_LIST" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127">
+   <redefinition CLSNAME="Y_MW_DEMO_TCODE_LIST" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+  data:
+    l_tcode  type tcode,
+    ls_tcode type tstcv,
+    lo_view  type ref to if_bsp_page.
+
+  l_tcode = request-&gt;get_form_field( &apos;tcode&apos; ).
+  translate l_tcode to upper case.
+
+  if l_tcode is not initial.
+
+    select single * from tstcv
+      into ls_tcode
+     where tcode = l_tcode
+       and sprsl = sy-langu.
+
+  endif.
+
+  lo_view = create_view( view_name = &apos;detail.htm&apos; ).
+  lo_view-&gt;set_attribute( name  = &apos;tcode&apos; value = ls_tcode ).
+  call_view( lo_view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <CLAS CLSNAME="Y_MW_DEMO_TCODE_SEL" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwdemotcode" UUID="E148D5EBD7D02EF1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2">
+  <publicSection>class Y_MW_DEMO_TCODE_SEL definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_DEMO_TCODE_SEL
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_MW_DEMO_TABLES_SEL
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_MW_DEMO_TABLES_SEL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_DEMO_TCODE_SEL" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDON="00000000">
+   <redefinition CLSNAME="Y_MW_DEMO_TCODE_SEL" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+* Sample application to show the use of the mobiweaver search help widget
+
+  data: view type ref to if_bsp_page.
+
+  view = create_view( view_name = &apos;selection.htm&apos; ).
+  call_view( view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
+ <SHLP SHLPNAME="YMWSH_TSTC" DDLANGUAGE="E" DDTEXT="Transaction codes with descriptions" ISSIMPLE="X" SELMETHOD="YMW_TSTCV" SELMTYPE="H" DIALOGTYPE="A" AS4USER="PLIMA" AS4DATE="20120130" AS4TIME="161145">
+  <dd32p SHLPNAME="YMWSH_TSTC" FIELDNAME="TCODE" FLPOSITION="0001" ROLLNAME="TCODE" SHLPINPUT="X" SHLPOUTPUT="X" SHLPSELPOS="01" SHLPLISPOS="01" DOMNAME="TCODE" HEADLEN="05" SCRLEN1="05" SCRLEN2="16" SCRLEN3="20" DATATYPE="CHAR" LENG="000020" OUTPUTLEN="000020" DECIMALS="000000"/>
+  <dd32p SHLPNAME="YMWSH_TSTC" FIELDNAME="PGMNA" FLPOSITION="0002" ROLLNAME="PROGRAM_ID" SHLPINPUT="X" SHLPSELPOS="02" SHLPLISPOS="02" DOMNAME="PROGNAME" HEADLEN="08" SCRLEN1="10" SCRLEN2="20" SCRLEN3="40" DATATYPE="CHAR" LENG="000040" OUTPUTLEN="000040" DECIMALS="000000"/>
+  <dd32p SHLPNAME="YMWSH_TSTC" FIELDNAME="TTEXT" FLPOSITION="0003" ROLLNAME="TTEXT_STCT" SHLPINPUT="X" SHLPSELPOS="03" SHLPLISPOS="03" DOMNAME="TEXT36" HEADLEN="36" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" DATATYPE="CHAR" LENG="000036" OUTPUTLEN="000036" DECIMALS="000000" LOWERCASE="X"/>
+ </SHLP>
+ <SICF ICF_NAME="YMWDEMOTCODE" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICFNODGUID="DC595Q9ZSD28QDZCJNR7IVRHU" ICFCHILDNO="0 " ICFALIASNO="0 " ICF_OPTION="0 " ICF_TIME="000000" ICF_CUSER="PLIMA" ICF_CDATE="20120127" ICF_MUSER="PLIMA" ICF_MDATE="20120127" ICF_AUTHRC="0" ORIG_NAME="ymwdemotcode">
+  <icfdocu ICF_NAME="YMWDEMOTCODE" ICFPARGUID="907RM5PM0WS1BRG2HAYGJYC1N" ICF_LANGU="E" ICF_DOCU="Mobiweaver table browser demo"/>
+ </SICF>
+ <VIEW VIEWNAME="YMW_TSTCV" AS4LOCAL="A" AS4VERS="0000" DDLANGUAGE="E" AGGTYPE="V" APPLCLASS="HV40" AUTHCLASS="00" ROOTTAB="TSTC" AS4USER="PLIMA" AS4DATE="20120130" AS4TIME="161120" DDTEXT="Transaction code" VIEWCLASS="H" VIEWGRANT="R">
+  <dd09l AS4VERS="0000" SCHFELDANZ="000" AS4DATE="00000000" AS4TIME="000000"/>
+  <dd26v VIEWNAME="YMW_TSTCV" TABNAME="TSTC" TABPOS="0001" FORTABNAME="TSTC"/>
+  <dd26v VIEWNAME="YMW_TSTCV" TABNAME="TSTCT" TABPOS="0002" FORTABNAME="TSTC" FORFIELD="TCODE" FORDIR="I"/>
+  <dd27p VIEWNAME="YMW_TSTCV" OBJPOS="0001" DDLANGUAGE="E" VIEWFIELD="TCODE" TABNAME="TSTC" FIELDNAME="TCODE" KEYFLAG="X" ROLLNAME="TCODE" ROLLNAMEVI="TCODE" MEMORYID="TCD" DOMNAME="TCODE" DATATYPE="CHAR" FLENGTH="000020" ENTITYTAB="TSTC" INTTYPE="C" INTLEN="000040" HEADLEN="05" SCRLEN1="05" SCRLEN2="16" SCRLEN3="20" OUTPUTLEN="000020" DECIMALS="000000" DDTEXT="Transaction Code" REPTEXT="TCode" SCRTEXT_S="TCode" SCRTEXT_M="Transaction Code" SCRTEXT_L="Transaction Code"/>
+  <dd27p VIEWNAME="YMW_TSTCV" OBJPOS="0002" DDLANGUAGE="E" VIEWFIELD="PGMNA" TABNAME="TSTC" FIELDNAME="PGMNA" ROLLNAME="PROGRAM_ID" ROLLNAMEVI="PROGRAM_ID" DOMNAME="PROGNAME" DATATYPE="CHAR" FLENGTH="000040" INTTYPE="C" INTLEN="000080" HEADLEN="08" SCRLEN1="10" SCRLEN2="20" SCRLEN3="40" OUTPUTLEN="000040" DECIMALS="000000" DDTEXT="Program Name" REPTEXT="Program" SCRTEXT_S="Program" SCRTEXT_M="Program" SCRTEXT_L="Program"/>
+  <dd27p VIEWNAME="YMW_TSTCV" OBJPOS="0003" DDLANGUAGE="E" VIEWFIELD="TTEXT" TABNAME="TSTCT" FIELDNAME="TTEXT" ROLLNAME="TTEXT_STCT" ROLLNAMEVI="TTEXT_STCT" DOMNAME="TEXT36" DATATYPE="CHAR" FLENGTH="000036" INTTYPE="C" INTLEN="000072" HEADLEN="36" SCRLEN1="10" SCRLEN2="15" SCRLEN3="20" OUTPUTLEN="000036" DECIMALS="000000" LOWERCASE="X" DDTEXT="Transaction text" REPTEXT="Transaction text" SCRTEXT_S="Text" SCRTEXT_M="Text" SCRTEXT_L="Transaction text"/>
+  <dd28j VIEWNAME="YMW_TSTCV" LTAB="TSTC" LFIELD="TCODE" OPERATOR="EQ" RTAB="TSTCT" RFIELD="TCODE" SOURCE="F" FRKTAB="TSTCT" FRKFIELD="TCODE" FRKDIR="I"/>
+  <dd28v CONDNAME="YMW_TSTCV" POSITION="0001" TABNAME="TSTCT" FIELDNAME="SPRSL" OPERATOR="EQ" CONSTANTS="SY-LANGU" OFFSET="0000" FLENGTH="0000"/>
+ </VIEW>
+ <WAPA APPLNAME="YMWDEMOTCODE" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" APPLEXT="ymwdemotcode" DEVCLASS="$TMP" ORIGLANG="E" MODIFLANG="E" TEXT="Mobiweaver transaction code browser demo">
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.DO" PAGENAME="detail.do" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="Y_MW_DEMO_TCODE_LIST" GENDATE="20120127" GENTIME="115957" PAGETYPE="C" CHANGETIME="115836" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Transaction code"/>
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.HTM" PAGENAME="detail.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="CL_O2DC59JSFPHFUOKGPCNOLX6J56A" GENDATE="20120130" GENTIME="161356" PAGETYPE="V" CHANGETIME="120831" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Transaction code detail">
+   <layout>&lt;%@page language=&quot;abap&quot; %&gt;
+&lt;%@include file=&quot;header.htm&quot; %&gt;
+&lt;div data-role=&quot;page&quot; id=&quot;detailPage&quot;&gt;
+&lt;div data-role=&quot;header&quot; data-position=&quot;inline&quot;&gt;
+  &lt;h1&gt;Transaction codes&lt;/h1&gt;
+&lt;a href=&quot;main.do&quot; data-role=&quot;button&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-l&quot;
+         data-inline=&quot;true&quot; class=&quot;back-button&quot; data-direction=&quot;reverse&quot;&gt;Back&lt;/a&gt;
+&lt;/div&gt;
+&lt;div data-role=&quot;content&quot;&gt;
+&lt;ul id=&quot;itemlist2&quot; data-role=&quot;listview&quot; data-theme=&quot;c&quot;&gt;
+&lt;li data-role=&quot;list-divider&quot;&gt;Details&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Tcode: &lt;%= tcode-tcode %&gt; &lt;/p&gt;
+    &lt;p&gt;Program: &lt;%= tcode-pgmna %&gt; &lt;/p&gt;
+    &lt;p&gt;Screen: &lt;%= tcode-dypno %&gt; &lt;/p&gt; &lt;/li&gt;
+&lt;li data-role=&quot;list-divider&quot;&gt;Description&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Tcode: &lt;%= tcode-ttext %&gt; &lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;%@include file=&quot;footer.htm&quot; %&gt;</layout>
+   <parameter APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.HTM" COMPNAME="TCODE" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TSTCV" ALIASNAME="tcode" TEXT="Transaction code"/>
+  </page>
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="FOOTER.HTM" PAGENAME="footer.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="CL_O2DC595Q9ZSCZXOJ02L1GDBLKOI" GENDATE="20120127" GENTIME="105458" PAGETYPE="X" CHANGETIME="105246" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E">
+   <layout>&lt;%@page language=&quot;ABAP&quot;%&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</layout>
+  </page>
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="HEADER.HTM" PAGENAME="header.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120130" IMPLCLASS="CL_O2DC595Q9ZSD0PD5BTWKVZE0YYA" GENDATE="20120130" GENTIME="161356" PAGETYPE="X" CHANGETIME="161353" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E">
+   <layout>&lt;%@page language=&quot;ABAP&quot;%&gt;
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+   &lt;head&gt;
+   &lt;meta charset=&quot;utf-8&quot;&gt;
+   &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+
+   &lt;title&gt;Transactions&lt;/title&gt;
+
+   &lt;link rel=&quot;stylesheet&quot; href=&quot;http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css&quot; /&gt;
+   &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobiweaver.searchhelp-0.1.css&quot; /&gt;
+   &lt;style&gt;
+     .ui-header .ui-title { margin:  0.8em 30px 0.8em; font-size: 14px; }
+   &lt;/style&gt;
+
+   &lt;script src=&quot;http://code.jquery.com/jquery-1.6.4.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobile-1.0.mobiweaver.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobiweaver.searchhelp-0.1.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;</layout>
+  </page>
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="MAIN.DO" PAGENAME="main.do" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="Y_MW_DEMO_TCODE_SEL" GENDATE="20120127" GENTIME="110021" PAGETYPE="C" CHANGETIME="110018" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Tcode browser demo"/>
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="SELECTION.HTM" PAGENAME="selection.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120130" IMPLCLASS="CL_O2DC595Q9ZSD1H1RNL84BLGGD82" GENDATE="20120130" GENTIME="161414" PAGETYPE="V" CHANGETIME="161411" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Data selection">
+   <layout>&lt;%@page language=&quot;abap&quot;%&gt;
+&lt;%@ include file=&apos;header.htm&apos; %&gt;
+
+&lt;div data-role=&quot;page&quot; id=&quot;selectionPage&quot;&gt;
+    &lt;div data-role=&quot;header&quot;&gt;
+        &lt;h1&gt;Transaction browser&lt;/h1&gt;
+        &lt;a href=&quot;#aboutPage&quot; data-icon=&quot;info&quot; class=&quot;ui-btn-right&quot;
+           data-rel=&quot;dialog&quot; data-transition=&quot;slidedown&quot;&gt;About&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div data-role=&quot;content&quot;&gt;
+
+        &lt;form action=&quot;detail.do&quot; method=&quot;get&quot;&gt;
+        &lt;!-- class=&quot;ui-hidden-accessible&quot; --&gt;
+        &lt;fieldset&gt;
+        &lt;div data-role=&quot;fieldcontain&quot;&gt;
+            &lt;label for=&quot;date&quot;&gt;Transaction:&lt;/label&gt;
+            &lt;input id=&quot;tcode&quot; type=&quot;text&quot; name=&quot;tcode&quot; data-role=&quot;searchhelp&quot;
+              data-options=&apos;{&quot;searchHelp&quot;: &quot;YMWSH_TSTC&quot;, &quot;resultField&quot;: &quot;tcode&quot;, &quot;resultTableFields&quot;: [&quot;TCODE&quot;,&quot;TTEXT&quot;]}&apos;&gt;
+        &lt;/div&gt;
+        &lt;/fieldset&gt;
+        &lt;fieldset&gt;
+            &lt;button type=&quot;submit&quot; data-theme=&quot;a&quot; data-icon=&quot;arrow-r&quot; data-iconpos=&quot;right&quot;&gt;Search&lt;/button&gt;
+        &lt;/fieldset&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;div data-role=&quot;page&quot; id=&quot;aboutPage&quot; data-theme=&quot;a&quot;&gt;
+  &lt;div data-role=&quot;header&quot;&gt;
+        &lt;h1&gt;About&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;div data-role=&quot;content&quot;&gt;
+    &lt;p&gt;Transaction code browser&lt;/p&gt;
+    &lt;p&gt;HTML5 mobile app using SAP BSP and jQueryMobile built as a sample application for the Mobiweaver project.&lt;/p&gt;
+    &lt;p&gt;&amp;copy; Mobiweaver 2011&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;%@ include file=&apos;footer.htm&apos; %&gt;</layout>
+  </page>
+ </WAPA>
+</nugget>

@@ -1,0 +1,27 @@
+
+.ui-icon-searchhelp {
+    background-image: url(mobiweaver_search_help.png);
+}
+
+table.ui-mobiweaver-searchhelp { width:100%; border-spacing: 0; }
+table.ui-mobiweaver-searchhelp thead th { text-align:left; border-bottom-width:1px; border-top-width:1px; }
+table.ui-mobiweaver-searchhelp th, td { text-align:left; padding:6px; }
+table.ui-mobiweaver-searchhelp tbody tr { margin: 0; display: table-row; font-size: 14px}
+
+
+
+
+/* borrowed from datebox */
+.ui-input-searchhelp { width: 97%; background-image: none; padding: .4em; line-height: 1.4; font-size: 16px; display: block; padding-top: 0px; padding-bottom: 0px; } 
+.ui-input-searchhelp { min-height: 38px; } /* Fix for IE8 */
+.ui-input-searchhelp .ui-btn-icon-notext { margin-top: 5px !important; margin-bottom: 5px !important; }
+.ui-input-searchhelp input { width: 87% !important; padding: 0 !important; margin-top: 5px !important; border: 1px solid transparent !important; vertical-align: middle; display: inline-block !important; background-color: transparent; zoom: 1; *display: inline; }
+.ui-input-searchhelp input:focus { outline: none;}
+.ui-input-searchhelp .ui-btn-text {display: none;}
+
+@media all and (max-width: 650px){ /* Fix internal input element at low size */
+  .ui-input-searchhelp input { width: 80% !important; }
+}
+@media all and (min-width: 450px){
+  .ui-input-searchhelp { width: 60%; display: inline-block; zoom:1; *display: inline; }
+}
