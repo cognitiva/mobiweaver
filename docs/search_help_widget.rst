@@ -31,7 +31,8 @@ In order to set the search help widget in a form element, the following setup is
 - add the data-role="searchhelp" in the form element
 - set a data-options element with keys:
 
-    - *searchHelp*  - an elementary search help in the SAP server 
+    - *searchHelp*  - a search help in the SAP server 
+    - *type* (optional) - set to "C" in case of a collective search help. Can be ommited otherwise.
     - *resultField* - the field name that will transfer the value to the html form field
     - *resultTableFields* (optional) - a list of visible columns in the search results table; defaults to showing all the columns.
     - *baseUrl* (optional): the url where the search.do and fields.do scripts reside. defaults to "/sap/bc/bsp/sap/ymwsearchhelp/"
@@ -46,6 +47,10 @@ Example::
   <input type="text" name="tknum" data-role="searchhelp" 
        data-options='{"searchHelp": "sh_tknum", "resultField": "tknum"}'>
 
+Example of a collective search help::
+
+  <input type="text" name="..." data-role="searchhelp" 
+       data-options='{"searchHelp": "admc", "type": "C", "resultField": "..."}'>
 
 
 Minified 

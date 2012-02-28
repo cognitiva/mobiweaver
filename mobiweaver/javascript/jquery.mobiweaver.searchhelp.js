@@ -129,31 +129,51 @@
         // execute the callback after the form initialization
         _initForm: function() {
             var self = this,
-                searchhelpname = this.options.searchHelp;
+                searchhelpname = this.options.searchHelp,
+                data = { sh: searchhelpname};
+            if (this.options.type) {
+                data.type = this.options.type;
+            }
             $.mobile.showPageLoadingMsg();
             $.ajax({
                 url: this._buildUrl('fields.do'),
-                data: { sh: searchhelpname },
+                data: data,
                 context: this.formPage.children(":jqmData(role='content')").first(),
                 dataType: "xml",
                 success: function(data) {
                     var page = '',
                         frm = '',
                         xmldoc = $(data);
-
-                    page += '<form data-role="searchhelpform">';
-                    page += '<input type="hidden" name="sh" value="' + searchhelpname + '">';
-                    xmldoc.find('field').each(function(index) {
-                        var description = $(this).text(),
-                            name = $(this).attr('name'),
-                            datatype = $(this).attr('datatype');
-                        //FIXME logic for different data types
-                        frm += '<label for="' + name + '">' + description + '</label>';
-                        frm += '<input type="text" name="' + name + '">';
-                    });
-                    if (frm !== '') {
-                        page += frm + '</form>';
-                        page += '<a href="#searchhelp" id="help-result-button" data-role="button" data-inline="false">Search</a>';
+                    self.configureSearchHelp(xmldoc);
+                    if (self.searchHelpList.length>1) {
+                        for (var i=0; i<self.searchHelpList.length; i++) {
+                            var sh = self.searchHelpList[i];
+                            frm = self._buildSearchHelpForm(sh);
+                            if (frm != '') {
+                                page += '<div data-role="collapsible">'
+                                page += '<h3>' + sh.description + '</h3>';
+                                page += '<form data-role="searchhelpform">';
+                                page += '<input type="hidden" name="sh" value="' + sh.name + '">';
+                                page += frm + '</form>';
+                                page += '<a href="#searchhelp" id="help-result-button-' + i + '" data-role="button" data-inline="false">Search</a>';
+                                page += '</div>';
+                            }
+                        }
+                        if (page !== '') {
+                            page = '<div data-role="collapsible-set">' + page + '</div>';
+                        }
+                    }
+                    else if (self.searchHelpList.length) {
+                        var sh = self.searchHelpList[0];
+                        frm = self._buildSearchHelpForm(sh);
+                        if (frm !== '') {
+                            page += '<form data-role="searchhelpform">';
+                            page += '<input type="hidden" name="sh" value="' + sh.name + '">';
+                            page += frm + '</form>';
+                            page += '<a href="#searchhelp" id="help-result-button" data-role="button" data-inline="false">Search</a>';
+                        }
+                    }
+                    if (page !== '') {
                         $(this).html(page);
                         self.formPage.page();
                         self.formPage.find(".ui-header a").unbind('vclick').bind('vclick', function(e) {
@@ -161,13 +181,15 @@
                             e.stopImmediatePropagation();
                             self.inputElement.trigger('searchhelp', {'method':'close', 'fromCloseButton':true});
                         });
-                        $(this).children(':jqmData(role="searchhelpform")').submit(function(e) {
+                        // trigger the 'search' event when a searchhelp form is submited
+                        $(this).find(':jqmData(role="searchhelpform")').submit(function(e) {
                             e.preventDefault();
                             var shFormData = $(this).serialize();
                             self.inputElement.trigger('searchhelp', {'method':'search', 'value': shFormData});
                             return false;
                         });
-                        $(this).find("a").each(function() {
+                        // make the search button submit the corresponding form
+                        $(this).find('a:jqmData(role="button")').each(function() {
                             $(this).bind('vclick', function(e) {
                                 $(this).parent().children(':jqmData(role="searchhelpform")').submit();
                                 return false;
@@ -185,6 +207,36 @@
                       $.mobile.hidePageLoadingMsg();
                 }
             });
+        },
+
+        _buildSearchHelpForm: function(sh) {
+            var frm = '';
+            for(var j=0; j<sh.fields.length; j++) {
+                var field = sh.fields[j];
+                frm += '<label for="' + field.name + '">' + field.description + '</label>';
+                frm += '<input type="text" name="' + field.name + '">';
+            }
+            return frm;
+        },
+
+        configureSearchHelp: function(xml) {
+            var shlist = [];
+            xml.find('searchhelplist searchhelp').each(function(index) {
+                var fields = [];
+                $(this).find('field').each(function(index) {
+                    fields.push({
+                            description: $(this).text(),
+                            name: $(this).attr('name'),
+                            datatype: $(this).attr('datatype')
+                    });
+                });
+                shlist.push({ 
+                    name: $(this).attr('name'), 
+                    description: $(this).attr('description'), 
+                    fields: fields 
+                });
+            });
+            this.searchHelpList = shlist;
         },
 
         open: function() {
