@@ -8,7 +8,7 @@ The mobiweaver package is a collection of utilities for easier development of mo
 - patched jQueryMobile: jQM files with a patch needed to work with BSP urls
 - sample applications: several apps that can be used as examples for developing with jQM/BSP
 
-Installation details and usage informations in the docs folder.
+Installation details and usage information in the docs folder.
 
 To get help, discuss or contribute:
 

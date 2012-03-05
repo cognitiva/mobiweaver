@@ -144,7 +144,7 @@
                     var page = '',
                         frm = '',
                         xmldoc = $(data);
-                    self.configureSearchHelp(xmldoc);
+                    self.configureSearchHelp(xmldoc, self.options.resultField);
                     if (self.searchHelpList.length>1) {
                         for (var i=0; i<self.searchHelpList.length; i++) {
                             var sh = self.searchHelpList[i];
@@ -219,8 +219,9 @@
             return frm;
         },
 
-        configureSearchHelp: function(xml) {
+        configureSearchHelp: function(xml, output_field) {
             var shlist = [];
+            var field_in_list = false;
             xml.find('searchhelplist searchhelp').each(function(index) {
                 var fields = [];
                 $(this).find('field').each(function(index) {
@@ -230,11 +231,22 @@
                             datatype: $(this).attr('datatype')
                     });
                 });
-                shlist.push({ 
+                // check if the output field is in the field list
+                field_in_list = false;
+                for (var i=0; i<fields.length; i++) {
+                  if (fields[i].name === output_field) {
+                    field_in_list = true;
+                  }
+                }
+                // if the output field is not in a search help, that
+                // search help is not included in the search help list
+                if (field_in_list) {
+                  shlist.push({ 
                     name: $(this).attr('name'), 
                     description: $(this).attr('description'), 
                     fields: fields 
-                });
+                  });
+                }
             });
             this.searchHelpList = shlist;
         },
