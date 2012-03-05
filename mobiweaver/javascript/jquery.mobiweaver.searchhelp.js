@@ -11,6 +11,7 @@
 (function($, undefined) {
     $.widget("mobiweaver.searchhelp", $.mobile.widget , {
         closed: false,
+        fieldsController: 'fields.do',
         /** Available options for the widget are specified here, along with default values. */
         options: {
             resultField: "NAME", // name of the field which holds the value to copy to the text box; should be in UPPER case; to be safe we force it to be on _create.
@@ -136,7 +137,7 @@
             }
             $.mobile.showPageLoadingMsg();
             $.ajax({
-                url: this._buildUrl('fields.do'),
+                url: this._buildUrl(this.fieldsController),
                 data: data,
                 context: this.formPage.children(":jqmData(role='content')").first(),
                 dataType: "xml",
@@ -338,7 +339,7 @@
                 }
             });
         },
-        
+
         _showErrorMessage: function() {
             //show error message
             $( "<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>"+ $.mobile.pageLoadErrorMessage +"</h1></div>" )

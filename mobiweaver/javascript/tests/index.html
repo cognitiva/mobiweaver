@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Mobiweaver SearchHelp Widget Test Suite</title>
+        <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-git.css" >
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="http://code.jquery.com/jquery-1.6.4.js"></script>
+        <script src="http://cogni.bitbucket.org/mobiweaver/jquery.mobile-1.0.mobiweaver.js"></script>
+        <script src="http://code.jquery.com/qunit/qunit-git.js"></script>
+        <script src="../jquery.mobiweaver.searchhelp.js"></script>
+
+        <script>
+          $(document).ready(function(){
+
+                module("mobiweaver.searchhelp", {
+                    setup: function() {
+                        $("#testPage").page();
+                    },
+                    teardown: function() {
+                    }
+                });
+
+                test("first test within module", function() {
+                  expect(2);
+                  var sh = $("#tcode").jqmData('searchhelp');
+                  ok(sh, "Search Help exists and is attached to the input element");
+                  equal(sh.options.searchHelp, "CU01G", "Search Help name is correct");
+                });
+
+                // FIXME both these asyncTests sometimes pass, sometimes fails with a strange qUnit error
+                asyncTest("Search help XML handling", function() {
+                    expect(6);
+                    var shWidget = $("#tcode").jqmData('searchhelp');
+                    $.get("fields.xml",
+                       function(data){
+                         shWidget.configureSearchHelp($(data), "KNART");
+                         equal(shWidget.searchHelpList.length, 1, "Read 1 searh help from the XML document");
+                         var sh = shWidget.searchHelpList[0];
+                         equal(sh.name, "CU01G");
+                         equal(sh.fields.length, 5);
+                         equal(sh.fields[0].name, "KNGRP");
+                         equal(sh.fields[0].description, " Dep. Group ");
+                         equal(sh.fields[0].datatype, "text");
+                         start();
+                       }, "xml");
+                });
+
+                asyncTest("In the search help list, if the SH does not have the output field it is filtered out", function() {
+                    expect(2);
+                    var shWidget = $("#tcode").jqmData('searchhelp');
+                    $.get("fields_collective.xml",
+                       function(data){
+                         shWidget.configureSearchHelp($(data), "COUNTRY");
+                         equal(shWidget.searchHelpList.length, 1, "Only 1 of the Search Helps has COUNTRY");
+                         shWidget.configureSearchHelp($(data), "CITY1");
+                         equal(shWidget.searchHelpList.length, 2, "Both search helps have CITY1");
+                         start();
+                       }, "xml");
+                });
+
+
+                asyncTest("Functional test", function() {
+                  // FIXME back() or close() generates a JS error
+                  expect(1);
+                  var shWidget = $("#tcode").jqmData('searchhelp');
+                  shWidget.fieldsController = 'fields.xml';
+                  shWidget.inputElement.trigger('searchhelp', {'method': 'open'});
+                  setTimeout(function() {
+                      ok($.mobile.activePage.find("input[name='KNGRP']").length==1, "Field is rendered");
+//                       window.history.back();
+//                       shWidget.inputElement.trigger('searchhelp', {'method': 'close'});
+                      start();
+                  }, 100);
+                });
+          });
+        </script>
+    </head>
+    <body>
+        <h1 id="qunit-header">QUnit Hello World</h1>
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent"></h2>
+        <h2 id="qunit-banner"></h2>
+        <ol id="qunit-tests"></ol>
+        <div id="qunit-fixture">
+            <div data-role="page" data-theme="a" id="testPage">
+                <div data-role="content">
+
+                    <div data-role="fieldcontain">
+                        <label for="date">Transaction:</label>
+                        <input id="tcode" type="text" name="tcode" data-role="searchhelp"
+                          data-options='{"searchHelp": "CU01G", "resultField": "kngrp", "resultTableFields": ["KNGRP","KNART"], "baseUrl": ""}'>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

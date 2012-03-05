@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<searchhelplist>
+<searchhelp name="CU01G" description="Find by Group">
+<field name="KNGRP" datatype="text"> Dep. Group </field>
+<field name="KNNAM" datatype="text"> Dependency </field>
+<field name="DATUV" datatype="text"> Valid From </field>
+<field name="KNART" datatype="text"> Dep. type </field>
+<field name="KNNUM" datatype="text"> Int.no. </field>
+</searchhelp>
+</searchhelplist>

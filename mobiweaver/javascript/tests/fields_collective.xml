@@ -1,0 +1,29 @@
+<searchhelplist>
+<searchhelp name="ADMCL" description="Country, region, sort field, name, City, Street">
+<field name="COUNTRY" datatype="text"> Country </field>
+<field name="REGION" datatype="text"> Region </field>
+<field name="SORT1" datatype="text"> 1 </field>
+<field name="SORT2" datatype="text"> 2 </field>
+<field name="MC_NAME1" datatype="text"> Name </field>
+<field name="MC_CITY1" datatype="text"> City </field>
+<field name="MC_STREET" datatype="text"> Street </field>
+<field name="ADDR_GROUP" datatype="text"> Addr. grp. </field>
+<field name="ADDRNUMBER" datatype="text"> Addr. no. </field>
+<field name="NAME1" datatype="text"> Name </field>
+<field name="STREET" datatype="text"> Street </field>
+<field name="CITY1" datatype="text"> City </field>
+</searchhelp>
+<searchhelp name="ADMCN" description="Name, address, sort field">
+<field name="MC_NAME1" datatype="text"> Name </field>
+<field name="POST_CODE1" datatype="text"> Postl Code </field>
+<field name="MC_CITY1" datatype="text"> City </field>
+<field name="MC_STREET" datatype="text"> Street </field>
+<field name="SORT1" datatype="text"> 1 </field>
+<field name="SORT2" datatype="text"> 2 </field>
+<field name="ADDR_GROUP" datatype="text"> Addr. grp. </field>
+<field name="ADDRNUMBER" datatype="text"> Addr. no. </field>
+<field name="NAME1" datatype="text"> Name </field>
+<field name="STREET" datatype="text"> Street </field>
+<field name="CITY1" datatype="text"> City </field>
+</searchhelp>
+</searchhelplist>
