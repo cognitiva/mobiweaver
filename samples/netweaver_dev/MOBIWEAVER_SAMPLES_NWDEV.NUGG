@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-16"?>
-<nugget name="MOBIWEAVER_SAMPLES_NWDEV.NUGG">
+<nugget name="/USERS/PEDROLIMA/HG/MOBIWEAVER/SAMPLES/NETWEAVER_DEV/MOBIWEAVER_SAMPLES_NWDEV.NUGG">
  <CLAS CLSNAME="Y_MW_DEMO_TCODE_LIST" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwdemotcode" UUID="E148DBCF671EA8F1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDON="20120127" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
   <publicSection>class Y_MW_DEMO_TCODE_LIST definition
   public
@@ -120,7 +120,7 @@ endmethod.</source>
  </VIEW>
  <WAPA APPLNAME="YMWDEMOTCODE" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" APPLEXT="ymwdemotcode" DEVCLASS="$TMP" ORIGLANG="E" MODIFLANG="E" TEXT="Mobiweaver transaction code browser demo">
   <page APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.DO" PAGENAME="detail.do" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="Y_MW_DEMO_TCODE_LIST" GENDATE="20120127" GENTIME="115957" PAGETYPE="C" CHANGETIME="115836" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Transaction code"/>
-  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.HTM" PAGENAME="detail.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="CL_O2DC59JSFPHFUOKGPCNOLX6J56A" GENDATE="20120130" GENTIME="161356" PAGETYPE="V" CHANGETIME="120831" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Transaction code detail">
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="DETAIL.HTM" PAGENAME="detail.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="CL_O2DC59JSFPHFUOKGPCNOLX6J56A" GENDATE="20120228" GENTIME="132231" PAGETYPE="V" CHANGETIME="120831" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Transaction code detail">
    <layout>&lt;%@page language=&quot;abap&quot; %&gt;
 &lt;%@include file=&quot;header.htm&quot; %&gt;
 &lt;div data-role=&quot;page&quot; id=&quot;detailPage&quot;&gt;
@@ -149,7 +149,7 @@ endmethod.</source>
 &lt;/body&gt;
 &lt;/html&gt;</layout>
   </page>
-  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="HEADER.HTM" PAGENAME="header.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120130" IMPLCLASS="CL_O2DC595Q9ZSD0PD5BTWKVZE0YYA" GENDATE="20120130" GENTIME="161356" PAGETYPE="X" CHANGETIME="161353" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E">
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="HEADER.HTM" PAGENAME="header.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="NMALTEZ" CHANGEDON="20120228" IMPLCLASS="CL_O2DC595Q9ZSD0PD5BTWKVZE0YYA" GENDATE="20120228" GENTIME="132230" PAGETYPE="X" CHANGETIME="132226" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E">
    <layout>&lt;%@page language=&quot;ABAP&quot;%&gt;
 
 &lt;!DOCTYPE html&gt;
@@ -169,12 +169,13 @@ endmethod.</source>
 
    &lt;script src=&quot;http://code.jquery.com/jquery-1.6.4.js&quot;&gt;&lt;/script&gt;
    &lt;script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobile-1.0.mobiweaver.js&quot;&gt;&lt;/script&gt;
-   &lt;script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobiweaver.searchhelp-0.1.js&quot;&gt;&lt;/script&gt;
+   &lt;!--script src=&quot;http://cogni.bitbucket.org/mobiweaver/jquery.mobiweaver.searchhelp-0.1.js&quot;&gt;&lt;/script--&gt;
+   &lt;script src=&quot;http://localhost/mobiweaver/jquery.mobiweaver.searchhelp.js&quot;&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;</layout>
   </page>
   <page APPLNAME="YMWDEMOTCODE" PAGEKEY="MAIN.DO" PAGENAME="main.do" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120127" IMPLCLASS="Y_MW_DEMO_TCODE_SEL" GENDATE="20120127" GENTIME="110021" PAGETYPE="C" CHANGETIME="110018" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Tcode browser demo"/>
-  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="SELECTION.HTM" PAGENAME="selection.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120130" IMPLCLASS="CL_O2DC595Q9ZSD1H1RNL84BLGGD82" GENDATE="20120130" GENTIME="161414" PAGETYPE="V" CHANGETIME="161411" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Data selection">
+  <page APPLNAME="YMWDEMOTCODE" PAGEKEY="SELECTION.HTM" PAGENAME="selection.htm" AUTHOR="PLIMA" CREATEDON="20120127" CHANGEDBY="PLIMA" CHANGEDON="20120305" IMPLCLASS="CL_O2DC595Q9ZSD1H1RNL84BLGGD82" GENDATE="20120305" GENTIME="174634" PAGETYPE="V" CHANGETIME="174632" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/html" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Data selection">
    <layout>&lt;%@page language=&quot;abap&quot;%&gt;
 &lt;%@ include file=&apos;header.htm&apos; %&gt;
 
@@ -191,9 +192,14 @@ endmethod.</source>
         &lt;!-- class=&quot;ui-hidden-accessible&quot; --&gt;
         &lt;fieldset&gt;
         &lt;div data-role=&quot;fieldcontain&quot;&gt;
-            &lt;label for=&quot;date&quot;&gt;Transaction:&lt;/label&gt;
+            &lt;label for=&quot;tcode&quot;&gt;Transaction:&lt;/label&gt;
             &lt;input id=&quot;tcode&quot; type=&quot;text&quot; name=&quot;tcode&quot; data-role=&quot;searchhelp&quot;
               data-options=&apos;{&quot;searchHelp&quot;: &quot;YMWSH_TSTC&quot;, &quot;resultField&quot;: &quot;tcode&quot;, &quot;resultTableFields&quot;: [&quot;TCODE&quot;,&quot;TTEXT&quot;]}&apos;&gt;
+        &lt;/div&gt;
+        &lt;div data-role=&quot;fieldcontain&quot;&gt;
+            &lt;label for=&quot;admc&quot;&gt;Business Address:&lt;/label&gt;
+            &lt;input id=&quot;admc&quot; type=&quot;text&quot; name=&quot;admc&quot; data-role=&quot;searchhelp&quot;
+              data-options=&apos;{&quot;searchHelp&quot;: &quot;ADMC&quot;, &quot;type&quot;: &quot;C&quot;, &quot;resultField&quot;: &quot;SORT1&quot;, &quot;resultTableFields&quot;: [&quot;COUNTRY&quot;,&quot;NAME1&quot;,&quot;CITY1&quot;]}&apos;&gt;
         &lt;/div&gt;
         &lt;/fieldset&gt;
         &lt;fieldset&gt;
