@@ -1,5 +1,98 @@
 <?xml version="1.0" encoding="utf-16"?>
-<nugget name="/USERS/PEDROLIMA/HG/MOBIWEAVER/MOBIWEAVER/ABAP/MOBIWEAVER.NUGG">
+<nugget name="/USERS/PEDROLIMA/HG/JQMW/MOBIWEAVER/ABAP/MOBIWEAVER.NUGG">
+ <CLAS CLSNAME="Y_MW_SEARCH_HELP_FIELDS" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwsearchhelp" UUID="E1477CBF20D5ECF1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDON="20120125" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
+  <publicSection>class Y_MW_SEARCH_HELP_FIELDS definition
+  public
+  inheriting from CL_BSP_CONTROLLER2
+  final
+  create public .
+
+*&quot;* public components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods DO_REQUEST
+    redefinition .</publicSection>
+  <protectedSection>*&quot;* protected components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+  <privateSection>*&quot;* private components of class Y_MW_SEARCH_HELP_FIELDS
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+  <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+  <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+  <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+  <inheritance CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125">
+   <redefinition CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
+  </inheritance>
+  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+   <source>method do_request.
+
+* Mobiweaver search help service
+*
+* this handler will return a XML file with the list of fields available
+* to be used in the search help dialog box.
+
+  data:
+    l_shlp_name type shlpname,
+    l_shlp_type type string,
+    ls_shlp     type shlp_descr,
+    lo_view     type ref to if_bsp_page,
+    lt_dd31s    type table of dd31s,
+    lt_shlp     type shlp_desct.
+
+  field-symbols:
+    &lt;ls_dd31s&gt; type dd31s.
+
+  l_shlp_name = request-&gt;get_form_field( name = &apos;sh&apos; ).
+  l_shlp_type = request-&gt;get_form_field( name = &apos;type&apos; ).
+
+  translate l_shlp_name to upper case.
+
+* collective search help
+  if l_shlp_type = &apos;C&apos;.
+    select * from dd31s into table lt_dd31s
+     where shlpname = l_shlp_name
+       and as4local = &apos;A&apos;.  &quot;activated entries
+
+    loop at lt_dd31s assigning &lt;ls_dd31s&gt;.
+      clear ls_shlp.
+
+      call function &apos;F4IF_GET_SHLP_DESCR&apos;
+        exporting
+          shlpname = &lt;ls_dd31s&gt;-subshlp
+        importing
+          shlp     = ls_shlp.
+
+      append ls_shlp to lt_shlp.
+    endloop.
+  else.
+*   elementary search helps
+
+    call function &apos;F4IF_GET_SHLP_DESCR&apos;
+      exporting
+        shlpname = l_shlp_name
+      importing
+        shlp     = ls_shlp.
+
+    append ls_shlp to lt_shlp.
+  endif.
+
+  response-&gt;set_header_field( name  = &apos;Content-Type&apos; value = &apos;text/xml&apos; ).&quot;#EC NOTEXT
+
+  lo_view = create_view( view_name = &apos;fields.xml&apos; ).
+  lo_view-&gt;set_attribute( name  = &apos;shlp&apos; value = lt_shlp ).
+
+  call_view( lo_view ).
+
+endmethod.</source>
+  </method>
+ </CLAS>
  <CLAS CLSNAME="Y_MW_SEARCH_HELP_RES" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwsearchhelp" UUID="E1477E1DEDF632F1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDON="20120125" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
   <publicSection>class Y_MW_SEARCH_HELP_RES definition
   public
@@ -109,99 +202,6 @@ private section.</privateSection>
   lo_view = create_view( view_name = &apos;list.xml&apos; ).
   lo_view-&gt;set_attribute( name  = &apos;search_help_name&apos; value = l_shlp_name ).
   lo_view-&gt;set_attribute( name  = &apos;results_xml&apos; value = lt_xml ).
-  call_view( lo_view ).
-
-endmethod.</source>
-  </method>
- </CLAS>
- <CLAS CLSNAME="Y_MW_SEARCH_HELP_FIELDS" VERSION="1" LANGU="E" DESCRIPT="Controller Class for ymwsearchhelp" UUID="E1477CBF20D5ECF1B73D001AA02FDAF2" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDON="20120125" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CL_BSP_CONTROLLER2" CHANGEDBY="PLIMA">
-  <publicSection>class Y_MW_SEARCH_HELP_FIELDS definition
-  public
-  inheriting from CL_BSP_CONTROLLER2
-  final
-  create public .
-
-*&quot;* public components of class Y_MW_SEARCH_HELP_FIELDS
-*&quot;* do not include other source files here!!!
-public section.
-
-  methods DO_REQUEST
-    redefinition .</publicSection>
-  <protectedSection>*&quot;* protected components of class Y_MW_SEARCH_HELP_FIELDS
-*&quot;* do not include other source files here!!!
-protected section.</protectedSection>
-  <privateSection>*&quot;* private components of class Y_MW_SEARCH_HELP_FIELDS
-*&quot;* do not include other source files here!!!
-private section.</privateSection>
-  <localImplementation>*&quot;* local class implementation for public class
-*&quot;* use this source file for the implementation part of
-*&quot;* local helper classes</localImplementation>
-  <localTypes>*&quot;* use this source file for any type declarations (class
-*&quot;* definitions, interfaces or data types) you need for method
-*&quot;* implementation or private method&apos;s signature</localTypes>
-  <localMacros>*&quot;* use this source file for any macro definitions you need
-*&quot;* in the implementation part of the class</localMacros>
-  <inheritance CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" STATE="1" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125">
-   <redefinition CLSNAME="Y_MW_SEARCH_HELP_FIELDS" REFCLSNAME="CL_BSP_CONTROLLER2" VERSION="1" MTDNAME="DO_REQUEST"/>
-  </inheritance>
-  <method CLSNAME="CL_BSP_CONTROLLER2" CMPNAME="DO_REQUEST" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
-   <source>method do_request.
-
-* Mobiweaver search help service
-*
-* this handler will return a XML file with the list of fields available
-* to be used in the search help dialog box.
-
-  data:
-    l_shlp_name type shlpname,
-    l_shlp_type type string,
-    ls_shlp     type shlp_descr,
-    lo_view     type ref to if_bsp_page,
-    lt_dd31s    type table of dd31s,
-    lt_shlp     type shlp_desct.
-
-  field-symbols:
-    &lt;ls_dd31s&gt; type dd31s.
-
-  l_shlp_name = request-&gt;get_form_field( name = &apos;sh&apos; ).
-  l_shlp_type = request-&gt;get_form_field( name = &apos;type&apos; ).
-
-  translate l_shlp_name to upper case.
-
-* collective search help
-  if l_shlp_type = &apos;C&apos;.
-    select * from dd31s into table lt_dd31s
-     where shlpname = l_shlp_name
-       and as4local = &apos;A&apos;.  &quot;activated entries
-
-    loop at lt_dd31s assigning &lt;ls_dd31s&gt;.
-      clear ls_shlp.
-
-      call function &apos;F4IF_GET_SHLP_DESCR&apos;
-        exporting
-          shlpname = &lt;ls_dd31s&gt;-subshlp
-        importing
-          shlp     = ls_shlp.
-
-      append ls_shlp to lt_shlp.
-    endloop.
-  else.
-*   elementary search helps
-
-    call function &apos;F4IF_GET_SHLP_DESCR&apos;
-      exporting
-        shlpname = l_shlp_name
-      importing
-        shlp     = ls_shlp.
-
-    append ls_shlp to lt_shlp.
-  endif.
-
-  response-&gt;set_header_field( name  = &apos;Content-Type&apos; value = &apos;text/xml&apos; ).&quot;#EC NOTEXT
-
-  lo_view = create_view( view_name = &apos;fields.xml&apos; ).
-  lo_view-&gt;set_attribute( name  = &apos;shlp&apos; value = lt_shlp ).
-
   call_view( lo_view ).
 
 endmethod.</source>
@@ -334,7 +334,7 @@ endform.                    &quot; MAP_RECORD_TO_XML</include_source>
  </SICF>
  <WAPA APPLNAME="YMWSEARCHHELP" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" APPLEXT="ymwsearchhelp" DEVCLASS="$TMP" ORIGLANG="E" MODIFLANG="E" TEXT="Mobiweaver search help service">
   <page APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.DO" PAGENAME="fields.do" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120125" IMPLCLASS="Y_MW_SEARCH_HELP_FIELDS" GENDATE="20120125" GENTIME="175318" PAGETYPE="C" CHANGETIME="174811" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Mobiweaver search help fields controller"/>
-  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.XML" PAGENAME="fields.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120227" IMPLCLASS="CL_O2DC4UNXC3DDW00OHEFM5C2O0KY" GENDATE="20120227" GENTIME="172003" PAGETYPE="V" CHANGETIME="172001" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Search help fields">
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.XML" PAGENAME="fields.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120306" IMPLCLASS="CL_O2DC4UNXC3DDW00OHEFM5C2O0KY" GENDATE="20120306" GENTIME="145812" PAGETYPE="V" CHANGETIME="145809" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="Search help fields">
    <layout>&lt;%@page language=&quot;abap&quot; %&gt;
 &lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;%
@@ -342,51 +342,33 @@ endform.                    &quot; MAP_RECORD_TO_XML</include_source>
   &lt;shlp&gt; type shlp_descr,
   &lt;field&gt; type DFIES.
 %&gt;
-&lt;searchhelplist&gt;
-&lt;%
+&lt;searchhelplist&gt;&lt;%
   loop at shlp assigning &lt;shlp&gt;.
-%&gt;
-&lt;searchhelp name=&quot;&lt;%= &lt;shlp&gt;-SHLPNAME %&gt;&quot; description=&quot;&lt;%= &lt;shlp&gt;-INTDESCR-DDTEXT %&gt;&quot;&gt;
-&lt;%
+%&gt;&lt;searchhelp name=&quot;&lt;%= &lt;shlp&gt;-SHLPNAME %&gt;&quot; description=&quot;&lt;%= &lt;shlp&gt;-INTDESCR-DDTEXT %&gt;&quot;&gt;&lt;%
   loop at &lt;shlp&gt;-FIELDDESCR assigning &lt;field&gt;.
-%&gt;
-&lt;field name=&quot;&lt;%= &lt;field&gt;-fieldname %&gt;&quot; datatype=&quot;text&quot;&gt;
-&lt;%
+%&gt;&lt;field name=&quot;&lt;%= &lt;field&gt;-fieldname %&gt;&quot; datatype=&quot;text&quot;&gt;&lt;%
   if &lt;field&gt;-scrtext_s is not initial.
-%&gt;
-&lt;%= &lt;field&gt;-scrtext_s %&gt;
-&lt;%
+%&gt;&lt;%= &lt;field&gt;-scrtext_s %&gt;&lt;%
   elseif &lt;field&gt;-scrtext_m is not initial.
-%&gt;
-&lt;%= &lt;field&gt;-scrtext_m %&gt;
-&lt;%
+%&gt;&lt;%= &lt;field&gt;-scrtext_m %&gt;&lt;%
   elseif &lt;field&gt;-reptext is not initial.
-%&gt;
-&lt;%= &lt;field&gt;-reptext %&gt;
-&lt;%
+%&gt;&lt;%= &lt;field&gt;-reptext %&gt;&lt;%
   endif.
-%&gt;
-&lt;/field&gt;
-&lt;%
+%&gt;&lt;/field&gt;&lt;%
   endloop.
-%&gt;
-&lt;/searchhelp&gt;
-&lt;%
+%&gt;&lt;/searchhelp&gt;&lt;%
   endloop.
-%&gt;
-&lt;/searchhelplist&gt;</layout>
+%&gt;&lt;/searchhelplist&gt;</layout>
    <parameter APPLNAME="YMWSEARCHHELP" PAGEKEY="FIELDS.XML" COMPNAME="SHLP" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="SHLP_DESCT" ALIASNAME="SHLP" TEXT="List of Alternative Elementary Search Helps"/>
   </page>
-  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" PAGENAME="list.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120305" IMPLCLASS="CL_O2DC4UPMWM6T4H70B1J6OHLF3ZM" GENDATE="20120305" GENTIME="165656" PAGETYPE="V" CHANGETIME="165654" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="List results for the search help">
+  <page APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" PAGENAME="list.xml" AUTHOR="PLIMA" CREATEDON="20120125" CHANGEDBY="PLIMA" CHANGEDON="20120306" IMPLCLASS="CL_O2DC4UPMWM6T4H70B1J6OHLF3ZM" GENDATE="20120306" GENTIME="145910" PAGETYPE="V" CHANGETIME="145908" CONTROLLERURL="CL_BSP_CONTROLLER" MIMETYPE="text/xml" BROWSER_CACHE="0 " SERVER_CACHE="0 " LAYOUTLANGU="E" VERSION="A" DEVCLASS="$TMP" LANGU="E" DESCRIPT="List results for the search help">
    <layout>&lt;%@page language=&quot;abap&quot;%&gt;&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;% field-symbols: &lt;line&gt; type char255. %&gt;
-&lt;searchhelp name=&quot;&lt;%= search_help_name %&gt;&quot;&gt;
-
-&lt;% loop at results_xml assigning &lt;line&gt;. %&gt;
-&lt;%= &lt;line&gt; %&gt;
-&lt;% endloop. %&gt;
-
-&lt;/searchhelp&gt;</layout>
+&lt;searchhelp name=&quot;&lt;%= search_help_name %&gt;&quot;&gt;&lt;%
+loop at results_xml assigning &lt;line&gt;.
+%&gt;&lt;%= &lt;line&gt; %&gt;&lt;%
+endloop.
+%&gt;&lt;/searchhelp&gt;</layout>
    <parameter APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" COMPNAME="RESULTS_XML" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="TCHAR255" ALIASNAME="results_xml" TEXT="Table of CHAR255"/>
    <parameter APPLNAME="YMWSEARCHHELP" PAGEKEY="LIST.XML" COMPNAME="SEARCH_HELP_NAME" VERSION="A" PARDECLTYP="1" TYPTYPE="1" TYPE="STRING" ALIASNAME="search_help_name"/>
   </page>
