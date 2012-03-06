@@ -60,12 +60,20 @@
             var thisTheme = $.mobile.getInheritedTheme(inputElement, opts.searchHelpTheme);
             opts.overlayTheme = opts.overlayTheme || thisTheme;
             opts.resultField = opts.resultField.toUpperCase(); // in SAP the field name is always in UPPER CASE.
+            // field names are always in uppercase in SAP, the result fields are converted
             if ($.isArray(opts.resultTableFields)) {
                 for (var i=0; i<opts.resultTableFields.length; i++) {
-                    // field names are always in uppercase in SAP
                     opts.resultTableFields[i] = opts.resultTableFields[i].toUpperCase();
                 }
-            } else {
+            } else if ($.type(opts.resultTableFields) === 'object') {
+                $.each(opts.resultTableFields, function(key, value) {
+                  if ($.isArray(value)) {
+                    for (var i=0; i<value.length; i++) {
+                      value[i] = value[i].toUpperCase();
+                    }
+                  }
+                });
+            } else {                
                 opts.resultTableFields = undefined;
             }
             var thisPage = inputElement.closest('.ui-page');
@@ -264,10 +272,20 @@
             }
         },
 
-        _isFieldVisible: function(field) {
+        _isFieldVisible: function(field, searchHelp) {
+            var resFields;
             var fieldName = $(field).attr('name');
-            return (this.options.resultTableFields==undefined ||
-                ($.inArray(fieldName, this.options.resultTableFields)>-1));
+            var resultTableFieldsType = $.type(this.options.resultTableFields);
+            if (resultTableFieldsType === 'array') {
+              // if resultTableFields is a list the output fields will be the same for all SH 
+              // inside the collective SH
+              resFields = this.options.resultTableFields;
+            } else if (resultTableFieldsType === 'object') {
+              // if resultTableFields is an object it is expected an entry
+              // with the output fields for each SH inside the collective SH
+              resFields = this.options.resultTableFields[searchHelp];
+            }
+            return (resFields==undefined || ($.inArray(fieldName, resFields)>-1))
         },
 
         search: function(value) {
@@ -287,18 +305,19 @@
                     self._showErrorMessage();
                 },
                 success: function(data){
-                    var xmldoc;
+                    var xmldoc, searchHelpName;
                     var resultTable = $('<table class="ui-mobiweaver-searchhelp"></table>');
                     var resultsExist = false;
                     xmldoc = $(data);
                     // header row
                     xmldoc.find('searchhelp entry').each( function(index) {
+                        searchHelpName = $(this).parent().attr('name');
                         if (index === 0) {
                             resultsExist = true;
                             var header = $('<thead></thead>');
                             var headerRow = $('<tr></tr>');
                             $(this).children().each( function() {
-                                if (self._isFieldVisible(this)) {
+                                if (self._isFieldVisible(this, searchHelpName)) {
                                     var th = $('<th></th>').text($(this).attr('title'));
                                     headerRow.append(th);
                                 }
@@ -311,11 +330,12 @@
                         // data
                         var tblBody = $('<tbody></tbody>');
                         xmldoc.find('searchhelp entry').each( function(index) {
+                            searchHelpName = $(this).parent().attr('name');
                             var resultText = $(this).find("field[name='"+self.options.resultField+"']").text();
                             // TODO exception if not found
                             var resRow = $('<tr></tr>',  {'class': 'ui-btn ui-btn-up-' + self.options.searchHelpTheme, 'data-result': resultText, 'data-theme': self.options.searchHelpTheme});
                             $(this).children().each( function() {
-                                if (self._isFieldVisible(this)) {
+                                if (self._isFieldVisible(this, searchHelpName)) {
                                     var resData = $('<td></td>').text($(this).text());
                                     resRow.append(resData);
                                 }
