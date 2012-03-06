@@ -1,6 +1,12 @@
 // Mobiweaver search help widget unit tests
 
 $(document).ready(function(){
+    
+    var utils = {
+      xmlfield: function(name) {
+        return '<field name='+name+'>';
+      }
+    };
 
       module("mobiweaver.searchhelp", {
           setup: function() {
@@ -10,7 +16,7 @@ $(document).ready(function(){
           }
       });
 
-      test("first test within module", function() {
+      test("First test within module", function() {
         expect(2);
         var sh = $("#tcode").jqmData('searchhelp');
         ok(sh, "Search Help exists and is attached to the input element");
@@ -62,4 +68,30 @@ $(document).ready(function(){
             start();
         }, 100);
       });
+      
+      asyncTest("Visible result list fields", function() {
+        expect(9);
+        var shWidget = $("#tcode").jqmData('searchhelp');
+        $.get("fields_collective.xml",
+           function(data){
+             shWidget.configureSearchHelp($(data), "COUNTRY");
+             // tests with list based result fields 
+             shWidget.options.resultTableFields = ["COUNTRY","MC_NAME1"];
+             ok(shWidget._isFieldVisible(utils.xmlfield("MC_NAME1"),"ADMCL"), "Field is visible in the list output");
+             equal(shWidget._isFieldVisible(utils.xmlfield("ADDR_GROUP"),"ADMCL"), false, "Field is not visible in the list output");
+             // tests with multiple list results fields
+             shWidget.options.resultTableFields = {"ADMCL":["COUNTRY","MC_NAME1"], "ADMCN":["MC_NAME1","CITY1"]};
+             ok(shWidget._isFieldVisible(utils.xmlfield("MC_NAME1"),"ADMCL"), "Field is visible in the list output");
+             ok(shWidget._isFieldVisible(utils.xmlfield("CITY1"),"ADMCN"), "Field is visible in the list output");
+             equal(shWidget._isFieldVisible(utils.xmlfield("COUNTRY"),"ADMCN"), false, "Field is not visible in the list output");
+             equal(shWidget._isFieldVisible(utils.xmlfield("POST_CODE1"),"ADMCN"), false, "Field is not visible in the list output");
+             // tests with no list result fields setup
+             shWidget.options.resultTableFields = undefined;
+             ok(shWidget._isFieldVisible(utils.xmlfield("MC_NAME1"),"ADMCL"), "Field is visible in the list output");
+             ok(shWidget._isFieldVisible(utils.xmlfield("ADDR_GROUP"),"ADMCL"), "Field is visible in the list output");
+             ok(shWidget._isFieldVisible(utils.xmlfield("CITY1"),"ADMCN"), "Field is visible in the list output");
+             start();
+           }, "xml");
+      });
+      
 });
